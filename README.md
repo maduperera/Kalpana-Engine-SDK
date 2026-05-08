@@ -99,6 +99,31 @@ pip install kalpana_sdk_enterprise-1.0.0-cp312-cp312-linux_x86_64.whl
 
 ---
 
+## 🤖 Model Compatibility & Architecture
+
+The Kalpanā Core is designed to deeply integrate with AI models by mathematically intercepting memory tensors. 
+
+### 1. Native Integration (Open-Weights Models)
+Kalpanā is a true KV Cache replacement. To achieve this, it must directly intercept the `past_key_values` tensor during the PyTorch `forward()` pass. 
+Therefore, Kalpanā is natively compatible with **all open-weights models**, including:
+*   **The LLaMA Family** (LLaMA-2, LLaMA-3 8B/70B, TinyLlama)
+*   **Mistral & Mixtral**
+*   **Qwen**
+
+*(If a model's weights and architecture are open and accessible via HuggingFace, Kalpanā can replace its memory subsystem).*
+
+### 2. Hybrid Integration (Gemini, ChatGPT, Claude)
+Closed-source models (like OpenAI's GPT-4 or Google's Gemini) are hidden behind remote APIs. Because developers do not have access to their server RAM, PyTorch code, or model weights, **it is mathematically impossible to inject Kalpanā into their attention heads.**
+
+However, developers can use a **Hybrid Architecture**:
+1. Run a lightweight local model (e.g., TinyLlama) powered by the Kalpanā Core to digest massive 3-million token corpuses (like legal repositories) for free, directly on edge hardware.
+2. Use Kalpanā's Holographic Engine to retrieve only the most highly resonant, exact context for the user's query.
+3. Send a tiny, highly synthesized prompt to ChatGPT or Gemini to generate the final response.
+
+*This provides the reasoning power of frontier models while reducing API token costs by up to 99%.*
+
+---
+
 ## 🛠️ For Individual Developers (Plug & Play)
 
 If you are using HuggingFace `transformers`, Kalpanā provides a native `Cache` object that replaces the standard `DynamicCache`. It requires exactly **two lines of code** to integrate.
