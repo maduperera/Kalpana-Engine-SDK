@@ -2,7 +2,40 @@
 
 ![Kalpanā](https://raw.githubusercontent.com/maduperera/Kalpana/main/kalpana-logo.png)
 
-![Kalpanā Architecture](architecture.png)
+```mermaid
+graph TD
+    subgraph "Enterprise LLM Application (External)"
+        API[Your Custom Backend / FastAPI]
+        LLM[HuggingFace Model e.g., LLaMA-3] <--> API
+    end
+
+    subgraph "📦 Kalpanā Engine SDK (Enterprise .whl)"
+        direction LR
+        
+        P_API[KalpanaCache & KalpanaEngineTensor]
+        
+        subgraph "Core RIF Mechanics (O(1) Memory)"
+            RIF{Holographic Matrix}
+            Write[Vector-to-Frequency Projection]
+            Read[Temporal Sweep & Resonance Matching]
+            
+            Write --> RIF
+            RIF --> Read
+        end
+        
+        P_API --> Write
+        P_API --> Read
+    end
+
+    %% Integration
+    API -- "Replaces KV-Cache for O(1) Context" --> P_API
+    P_API <--> LLM
+
+    style API fill:#1f2937,stroke:#fff,stroke-width:2px,color:#fff
+    style LLM fill:#1f2937,stroke:#fff,stroke-width:2px,color:#fff
+    style P_API fill:#003366,stroke:#00ccff,stroke-width:2px,color:#fff
+    style RIF fill:#550080,stroke:#d400ff,stroke-width:3px,color:#fff
+```
 
 The **Kalpanā SDK** is a revolutionary drop-in replacement for standard Transformer KV Caching. By utilizing a proprietary **Kalpanā Holographic Engine**, Kalpanā compresses infinite context into an $O(1)$ constant-memory footprint. 
 
@@ -222,19 +255,26 @@ The SDK's mathematical core is compiled via Cython into native C-extensions. The
 *Kalpanā: Built by Vijñāna AI.*
 ---
 
-## ?? Reproducing the Benchmarks
+## 📊 Reproducing the Benchmarks
 
-We believe in complete empirical transparency. You can reproduce the memory, latency, and perplexity claims found in this documentation by running the unified benchmarking suite provided in this repository.
+We believe in complete empirical transparency. You can reproduce the memory, latency, and perplexity claims found in this documentation by running the unified benchmarking suite provided in this repository. 
 
-### Running the Suite
+Because LLM generation benchmarks are computationally heavy, we strongly recommend running this test in a **Google Colab** environment with a free T4 GPU, rather than on your local CPU.
 
-``bash
-# Ensure requirements are installed
-pip install torch matplotlib numpy
+### Step-by-Step Instructions (Google Colab)
 
-# Run the unified benchmark
-python kalpana_empirical_benchmark.py
-``
+1. **Open Google Colab:** Go to [colab.research.google.com](https://colab.research.google.com/) and create a new notebook.
+2. **Enable GPU:** Go to `Runtime` > `Change runtime type` and select **T4 GPU** (or any available GPU).
+3. **Upload the Script:** Upload the `kalpana_empirical_benchmark.py` file from this repository into the Colab file explorer.
+4. **Run the Benchmark:** Create a code cell and execute the following commands:
+
+```bash
+# Install the required libraries
+!pip install torch matplotlib numpy transformers accelerate
+
+# Execute the benchmarking script
+!python kalpana_empirical_benchmark.py
+```
 
 ### What this script does:
 1. **$O(1) vs $O(N) Scaling Proof**: It mathematically computes the exact tensor memory requirements for the Kalpana Core versus standard HuggingFace DynamicCache across 128K, 1M, 3M, and 5M tokens.
