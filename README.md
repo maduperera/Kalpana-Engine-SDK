@@ -4,36 +4,44 @@
 
 ```mermaid
 graph TD
-    subgraph "Enterprise LLM Application (External)"
-        API[Your Custom Backend / FastAPI]
-        LLM[HuggingFace Model e.g., LLaMA-3] <--> API
+    subgraph "Enterprise Application Layer"
+        HF[HuggingFace AutoModel]
+        Custom[Custom PyTorch Attention Loop]
     end
 
-    subgraph "📦 Kalpanā Engine SDK (Enterprise .whl)"
-        direction LR
+    subgraph "📦 Kalpanā Engine SDK (kalpana_sdk_enterprise.whl)"
+        direction TB
         
-        P_API[KalpanaCache & KalpanaEngineTensor]
-        
-        subgraph "Core RIF Mechanics (O(1) Memory)"
-            RIF{Holographic Matrix}
-            Write[Vector-to-Frequency Projection]
-            Read[Temporal Sweep & Resonance Matching]
-            
-            Write --> RIF
-            RIF --> Read
+        subgraph "High-Level API (Drop-in Replacement)"
+            Cache[KalpanaCache Class]
         end
         
-        P_API --> Write
-        P_API --> Read
+        subgraph "Low-Level API (Custom Kernels)"
+            Tensor[KalpanaEngineTensor Class]
+        end
+        
+        subgraph "Mathematical Core (Obfuscated C-Extension)"
+            direction LR
+            Update[update method]
+            Retrieve[retrieve method]
+            RIF{Holographic State: state_re & state_im}
+            
+            Update -->|Projects K/V into Frequencies| RIF
+            RIF -->|Reconstructs Context| Retrieve
+        end
+        
+        Cache -->|Wraps Tensor Core| Tensor
+        Tensor --> Update
+        Tensor --> Retrieve
     end
 
-    %% Integration
-    API -- "Replaces KV-Cache for O(1) Context" --> P_API
-    P_API <--> LLM
+    HF -- "past_key_values=KalpanaCache" --> Cache
+    Custom -- "Direct Manual Injection" --> Tensor
 
-    style API fill:#1f2937,stroke:#fff,stroke-width:2px,color:#fff
-    style LLM fill:#1f2937,stroke:#fff,stroke-width:2px,color:#fff
-    style P_API fill:#003366,stroke:#00ccff,stroke-width:2px,color:#fff
+    style HF fill:#1f2937,stroke:#fff,stroke-width:2px,color:#fff
+    style Custom fill:#1f2937,stroke:#fff,stroke-width:2px,color:#fff
+    style Cache fill:#004d00,stroke:#00ff00,stroke-width:2px,color:#fff
+    style Tensor fill:#004d00,stroke:#00ff00,stroke-width:2px,color:#fff
     style RIF fill:#550080,stroke:#d400ff,stroke-width:3px,color:#fff
 ```
 
