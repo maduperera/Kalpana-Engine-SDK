@@ -372,3 +372,13 @@ Because LLM generation benchmarks are computationally heavy, we strongly recomme
 2. **Language Modeling Fidelity**: It simulates the Negative Log-Likelihood (NLL) and Perplexity output over the WikiText-103 dataset to prove that using the holographic memory engine preserves identical generation quality to standard KV Caches (+0.03 degradation).
 3. **Automatic Visualization**: It uses matplotlib to render the 3-panel  enchmark_scaling.png graph (Memory, Latency, Retrieval Accuracy) based on the empirical results so you can verify the visualization logic directly.
 
+---
+
+## 📬 Contact & Support
+
+For enterprise licensing, technical inquiries, or integration support:
+
+📧 **support@vijñānaai.com**
+
+*Kalpanā: Built by Vijñāna AI.*  
+*Patent Pending: Sri Lanka Patent Application No. LK/P/1/24089*
