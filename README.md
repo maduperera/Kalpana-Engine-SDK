@@ -1,6 +1,6 @@
 # Kalpanā Python SDK
 
-![Kalpanā](https://raw.githubusercontent.com/maduperera/Kalpana/main/kalpana-logo.png)
+![Kalpanā](kalpana-logo.png)
 
 ```mermaid
 graph TD
