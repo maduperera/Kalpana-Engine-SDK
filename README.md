@@ -213,9 +213,23 @@ The core tensor engine allows you to mathematically inject memory vectors into t
 import torch
 from kalpana.core import KalpanaEngineTensor
 
-# Initialize the O(1) memory state
-# (batch_size=1, num_heads=32, head_dim=64)
-memory_engine = KalpanaEngineTensor(shape=(1, 32, 64))
+# Initialize the O(1) memory state with flexible, optional parameters:
+# - shape: Tuple of (batch, num_heads, dimensions)
+# - bandwidth: Optional resolution setting (default is 2048)
+# - batch_size / batch: Optional keyword argument for batch size
+# - dim / dimensions / dimension: Optional keyword argument for head dimension
+# - num_heads / heads: Optional keyword argument for number of attention heads
+
+# Example A: Initialize using a shape tuple and optional bandwidth (default 2048)
+memory_engine = KalpanaEngineTensor(shape=(1, 32, 64), bandwidth=2048)
+
+# Example B: Initialize using separate keyword arguments (perfectly flexible)
+memory_engine_kv = KalpanaEngineTensor(
+    batch=1, 
+    heads=32, 
+    dimensions=64, 
+    bandwidth=2048
+)
 
 # Simulate a custom attention loop
 def custom_attention_forward(query, key, value):
