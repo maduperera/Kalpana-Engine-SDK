@@ -303,18 +303,3 @@ Because LLM generation benchmarks are computationally heavy, we strongly recomme
 2. **Language Modeling Fidelity**: It simulates the Negative Log-Likelihood (NLL) and Perplexity output over the WikiText-103 dataset to prove that using the holographic memory engine preserves identical generation quality to standard KV Caches (+0.03 degradation).
 3. **Automatic Visualization**: It uses matplotlib to render the 3-panel  enchmark_scaling.png graph (Memory, Latency, Retrieval Accuracy) based on the empirical results so you can verify the visualization logic directly.
 
----
-
-## 🏗️ Repository Architecture Mapping
-
-To maintain strict IP protection, the Kalpanā ecosystem is divided into the following repositories:
-
-| Repository Name | Visibility | What it contains & What it's meant for |
-| :--- | :---: | :--- |
-| **`Kalpana_Engine`** | 🔒 Private | **The Master Source of Truth.** Contains the raw, human-readable source code for the PWA web frontend and the deepest core mathematics of the RIF engine. |
-| **`Kalpana-SDK`** | 🔒 Private | **The SDK Development Environment.** Contains the raw, readable Python and WASM source code for the math engine. You edit code here before compiling it into a secure binary. |
-| **`Kalpana-Desktop-Private`**| 🔒 Private | **The Desktop Build Environment.** Contains the local Python Flask backend and the build scripts (`build_windows.bat`) used to package the app into `.exe` and Mac `.app`. |
-| **`Kalpana-KV`** | 🔒 Private | **The R&D Sandbox.** Your internal development repository specifically focused on testing and synchronizing the Key-Value (KV) Cache replacement logic and Proof of Concepts. |
-| **`Kalpana`** | 📖 Public | **The Consumer Web App.** Contains *only* the compiled, minified, and obfuscated release files for the PWA. Regular users go here to launch the web app in their browser. |
-| **`Kalpana-Desktop`** | 📖 Public | **The Consumer Desktop App.** Contains *only* the downloadable installer binaries (`Kalpana_Setup.exe` and Mac Zip). Regular users go here to download the offline app. |
-| **`Kalpana-Engine-SDK`** | 📖 Public | **The B2B Enterprise Product.** Contains *only* the highly secure, compiled `.whl` Python binary. Other AI developers go here to install your $O(1)$ memory engine without ever seeing your source code. |
