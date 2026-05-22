@@ -153,6 +153,29 @@ pip install kalpana_sdk_enterprise-1.0.0-cp312-cp312-linux_x86_64.whl
 
 ---
 
+## 🔌 SDK Flavors & Language Support (Python & C++)
+
+The Kalpanā Holographic Engine is distributed in two distinct architectural flavors, optimized for different integration contexts and deployment environments:
+
+### A. The Python SDK Flavor (This Package)
+This is the primary B2B developer interface, built for rapid integration, research, and standard Python training/inference pipelines:
+*   **High-Level Drop-In API (`KalpanaCache` / alias `KalpanaHuggingFaceCache`):**
+    *   **What it is:** A high-level wrapper inheriting from HuggingFace `transformers.Cache`.
+    *   **Why & How:** It replaces standard $O(N)$ linear memory caches with zero custom neural network changes, wrapping the custom core under the hood.
+    *   **Context:** Used by individual developers and engineers working with HuggingFace models (e.g., LLaMA-3, Mistral, Qwen) for rapid, plug-and-play evaluation.
+*   **Low-Level Core API (`KalpanaEngineTensor` / alias `KalpanaRIFTensor`):**
+    *   **What it is:** The direct mathematical tensor-level interface representing the active Resonant Interference Field (RIF).
+    *   **Why & How:** Used by developers to perform direct frequency projections (`update`) and context retrieval (`retrieve`) on raw Key and Value tensors.
+    *   **Context:** Perfect for custom PyTorch attention loops, custom base-model architectures, training experiments, or low-level kernel development.
+
+### B. The C++ Native Engine Flavor
+For ultra-low latency, edge devices, and heavy production environments, the engine is fully implemented as a native C++ extension:
+*   **Vectorized Acceleration:** Directly utilizes C++17 with strict SIMD compiler optimization (**AVX2**, **ARM NEON**, or **Apple Metal Shading Language**).
+*   **Hook-Level Interception:** Connects directly into lower-level native inference runtimes (such as `llama.cpp` or custom GGML inference pipelines) via native C++ Hooks (`llama-kv-cache.cpp`).
+*   **Zero-Interpreter Overhead:** Bypasses the Python interpreter entirely, achieving sub-millisecond holographic sweeps on edge devices, IoT hardware, and local desktop applications.
+
+---
+
 ## 🤖 Model Compatibility & Architecture
 
 The Kalpanā Core is designed to deeply integrate with AI models by mathematically intercepting memory tensors. 
@@ -210,7 +233,7 @@ For AI labs building, pre-training, or serving massive foundational models (such
 If you are using HuggingFace `transformers`, Kalpanā provides a native `Cache` object that replaces the standard `DynamicCache`. It requires exactly **two lines of code** to integrate.
 
 > [!TIP]
-> **Backward Compatibility:** `KalpanaHuggingFaceCache` is also exported as a direct drop-in alias for `KalpanaCache` to support older integrations.
+> **Backward Compatibility:** `KalpanaHuggingFaceCache` is exported as a direct drop-in alias for `KalpanaCache` to support legacy pipelines. Both function identically at the HF integration layer (see [SDK Flavors](#A-the-python-sdk-flavor-this-package)).
 
 ### Example: Running TinyLlama with $O(1)$ Memory
 
@@ -249,7 +272,7 @@ print(tokenizer.decode(outputs[0]))
 If you are building custom AI architectures, writing custom CUDA kernels, or replacing attention mechanisms at the lowest level, you can interface directly with the `KalpanaEngineTensor`.
 
 > [!TIP]
-> **Backward Compatibility:** `KalpanaRIFTensor` is also exported as a direct drop-in alias for `KalpanaEngineTensor` to support older integrations.
+> **Backward Compatibility:** `KalpanaRIFTensor` is exported as a direct drop-in alias for `KalpanaEngineTensor` to support legacy codebase integrations. Both function identically at the tensor layer (see [SDK Flavors](#A-the-python-sdk-flavor-this-package)).
 
 ### The `KalpanaEngineTensor` API
 
