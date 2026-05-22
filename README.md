@@ -4,6 +4,10 @@
 
 ```mermaid
 graph TD
+    subgraph "Foundational AI Labs (B2B Core)"
+        Foundational["Foundational Model Core<br>(Gemini / GPT-4 / Qwen)"]
+    end
+
     subgraph "Enterprise Application Layer"
         HF[HuggingFace AutoModel]
         Custom[Custom PyTorch Attention Loop]
@@ -38,6 +42,7 @@ graph TD
 
     HF -- "past_key_values=KalpanaCache" --> Cache
     Custom -- "Direct Manual Injection" --> Tensor
+    Foundational -->|Base Attention Embedding - Constant-Memory Training & Serving| Tensor
     
     %% Hybrid Integration Path
     Cache -->|1. Temporal Sweep Context Retrieval| LocalContext["Highly Resonant Context (Simulated Edge Models)"]
@@ -50,6 +55,7 @@ graph TD
     style Tensor fill:#004d00,stroke:#00ff00,stroke-width:2px,color:#fff
     style RIF fill:#550080,stroke:#d400ff,stroke-width:3px,color:#fff
     style LocalContext fill:#1f2937,stroke:#fff,stroke-dasharray: 5 5,color:#fff
+    style Foundational fill:#664d00,stroke:#ffcc00,stroke-width:2px,color:#fff
 ```
 
 The **Kalpanā SDK** is a revolutionary drop-in replacement for standard Transformer KV Caching. By utilizing a proprietary **Kalpanā Holographic Engine**, Kalpanā compresses infinite context into an $O(1)$ constant-memory footprint. 
