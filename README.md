@@ -7,6 +7,7 @@ graph TD
     subgraph "Enterprise Application Layer"
         HF[HuggingFace AutoModel]
         Custom[Custom PyTorch Attention Loop]
+        ClosedAPI["Frontier API (Gemini / GPT-4 / Claude)"]
     end
 
     subgraph "📦 Kalpanā Engine SDK (kalpana_sdk_enterprise.whl)"
@@ -37,12 +38,18 @@ graph TD
 
     HF -- "past_key_values=KalpanaCache" --> Cache
     Custom -- "Direct Manual Injection" --> Tensor
+    
+    %% Hybrid Integration Path
+    Cache -->|1. Temporal Sweep Context Retrieval| LocalContext["Highly Resonant Context (Simulated Edge Models)"]
+    LocalContext -->|2. Tiny Synthesized Prompt (Save 99% cost)| ClosedAPI
 
     style HF fill:#1f2937,stroke:#fff,stroke-width:2px,color:#fff
     style Custom fill:#1f2937,stroke:#fff,stroke-width:2px,color:#fff
+    style ClosedAPI fill:#4d1a00,stroke:#ff6600,stroke-width:2px,color:#fff
     style Cache fill:#004d00,stroke:#00ff00,stroke-width:2px,color:#fff
     style Tensor fill:#004d00,stroke:#00ff00,stroke-width:2px,color:#fff
     style RIF fill:#550080,stroke:#d400ff,stroke-width:3px,color:#fff
+    style LocalContext fill:#1f2937,stroke:#fff,stroke-dasharray: 5 5,color:#fff
 ```
 
 The **Kalpanā SDK** is a revolutionary drop-in replacement for standard Transformer KV Caching. By utilizing a proprietary **Kalpanā Holographic Engine**, Kalpanā compresses infinite context into an $O(1)$ constant-memory footprint. 
