@@ -209,6 +209,9 @@ For AI labs building, pre-training, or serving massive foundational models (such
 
 If you are using HuggingFace `transformers`, Kalpanā provides a native `Cache` object that replaces the standard `DynamicCache`. It requires exactly **two lines of code** to integrate.
 
+> [!TIP]
+> **Backward Compatibility:** `KalpanaHuggingFaceCache` is also exported as a direct drop-in alias for `KalpanaCache` to support older integrations.
+
 ### Example: Running TinyLlama with $O(1)$ Memory
 
 ```python
@@ -244,6 +247,9 @@ print(tokenizer.decode(outputs[0]))
 ## 🏢 For Enterprise & LLM Builders (Core API)
 
 If you are building custom AI architectures, writing custom CUDA kernels, or replacing attention mechanisms at the lowest level, you can interface directly with the `KalpanaEngineTensor`.
+
+> [!TIP]
+> **Backward Compatibility:** `KalpanaRIFTensor` is also exported as a direct drop-in alias for `KalpanaEngineTensor` to support older integrations.
 
 ### The `KalpanaEngineTensor` API
 
