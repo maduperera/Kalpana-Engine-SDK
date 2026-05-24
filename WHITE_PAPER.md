@@ -54,6 +54,16 @@ This allows the memory footprint to remain strictly **O(1) and user-configurable
 | **Qwen-2 7B (Surgical)** | 28 | 16 | 128 | 64 | FP32 (4B) | **56 MB** | 3,000,000 (3M) | **98.2%** |
 | **LLaMA-3 70B (Surgical)** | 80 | 8 | 128 | 64 | FP32 (4B) | **80 MB** | 3,000,000 (3M) | **97.4%** |
 
+#### 🔍 Key Architectural Parameters Explained
+
+To understand how the constant VRAM footprint is calculated, it helps to define the standard Transformer parameters used in the formula:
+
+*   **Layers:** The total number of transformer blocks/layers in the neural network (e.g., 32 layers for LLaMA-3 8B). Kalpanā allocates a constant-sized holographic register for each layer.
+*   **KV Heads (Key-Value Heads):** The number of attention heads allocated specifically for key ($K$) and value ($V$) projections in Multi-Query Attention (MQA) or Grouped-Query Attention (GQA) architectures. For example, LLaMA-3 8B uses 8 KV heads, while Qwen-2 7B uses 16.
+*   **Head Dimension (Head Dim):** The size/dimensionality of each individual attention head's vector projection (typically 128 dim for modern open-weights models).
+*   **Bandwidth ($B$):** The user-configurable resolution parameter of the Kalpanā Holographic Engine. Rather than storing $N$ sequence tokens, Kalpanā projects context into a fixed frequency spectrum of size $B$.
+*   **Precision (Bytes):** The numerical format used to store the active model states. By default, calculations utilize FP32 (4 bytes per parameter) to ensure absolute mathematical stability and gradient flow during backpropagation.
+
 ---
 
 ## 3. The Architecture & Integration Map
@@ -221,6 +231,12 @@ The Kalpanā SDK establishes a new baseline for foundational AI execution. By ac
 [https://github.com/maduperera/Kalpana-Engine-SDK](https://github.com/maduperera/Kalpana-Engine-SDK)
 
 ---
+
+## 8. Contact & Support
+
+For enterprise licensing, technical inquiries, or integration support:
+
+📧 **support@vijñānaai.com**
 
 *Kalpanā: Built by Vijñāna AI.*  
 *Patent Pending: Sri Lanka Patent Application No. LK/P/1/24089*

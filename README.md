@@ -153,6 +153,16 @@ We provide strong empirical evidence across memory scaling, latency, complex rea
 | **Qwen-2 7B (Surgical)** | 28 | 16 | 128 | 64 | FP32 (4B) | **56 MB** | 3,000,000 (3M) | **98.2%** |
 | **LLaMA-3 70B (Surgical)** | 80 | 8 | 128 | 64 | FP32 (4B) | **80 MB** | 3,000,000 (3M) | **97.4%** |
 
+#### 🔍 Key Architectural Parameters Explained
+
+To understand how the constant VRAM footprint is calculated, it helps to define the standard Transformer parameters used in the formula:
+
+*   **Layers:** The total number of transformer blocks/layers in the neural network (e.g., 32 layers for LLaMA-3 8B). Kalpanā allocates a constant-sized holographic register for each layer.
+*   **KV Heads (Key-Value Heads):** The number of attention heads allocated specifically for key ($K$) and value ($V$) projections in Multi-Query Attention (MQA) or Grouped-Query Attention (GQA) architectures. For example, LLaMA-3 8B uses 8 KV heads, while Qwen-2 7B uses 16.
+*   **Head Dimension (Head Dim):** The size/dimensionality of each individual attention head's vector projection (typically 128 dim for modern open-weights models).
+*   **Bandwidth ($B$):** The user-configurable resolution parameter of the Kalpanā Holographic Engine. Rather than storing $N$ sequence tokens, Kalpanā projects context into a fixed frequency spectrum of size $B$.
+*   **Precision (Bytes):** The numerical format used to store the active model states. By default, calculations utilize FP32 (4 bytes per parameter) to ensure absolute mathematical stability and gradient flow during backpropagation.
+
 > **Addressing the $O(1)$ Latency Nuance:**
 > End-to-end latency shows a slight sub-linear increase (e.g., 120ms to 160ms) across millions of tokens. This is strictly an I/O artifact of parsing the raw string tokens into the engine. The core holographic field update remains strictly $O(1)$ at ~12ms per matrix projection, regardless of sequence length $N$.
 
