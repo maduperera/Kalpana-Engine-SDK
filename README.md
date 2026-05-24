@@ -137,6 +137,17 @@ We provide strong empirical evidence across memory scaling, latency, complex rea
 
 > **Addressing the Memory Scaling:**
 > Memory is $O(1)$ strictly with respect to sequence length $N$, but scales with model architecture ($layers \times kv\_heads \times head\_dim$) **and the user-configurable `bandwidth` resolution parameter**. The full formula is: $\text{VRAM} = 2 \times layers \times bandwidth \times kv\_heads \times head\_dim \times bytes$. For LLaMA-3 8B (32 layers, 8 KV heads, 128 dim, FP32) at bandwidth=64, the total model cache is exactly **32 MB** — still 500× smaller than the standard cache at 128K tokens.
+> 
+> #### 📐 Constant VRAM Scaling Table by Model Architecture
+> 
+| Model Architecture | Layers | KV Heads | Head Dim | Bandwidth ($B$) | Precision | Calculated Cache Size |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **LLaMA-3 8B (Surgical)** | 32 | 8 | 128 | 64 | FP32 (4B) | **32 MB** |
+| **LLaMA-3 8B (Medium)** | 32 | 8 | 128 | 128 | FP32 (4B) | **64 MB** |
+| **LLaMA-3 8B (High)** | 32 | 8 | 128 | 256 | FP32 (4B) | **128 MB** |
+| **Mistral 7B (Surgical)** | 32 | 8 | 128 | 64 | FP32 (4B) | **32 MB** |
+| **Qwen-2 7B (Surgical)** | 28 | 16 | 128 | 64 | FP32 (4B) | **56 MB** |
+| **LLaMA-3 70B (Surgical)** | 80 | 8 | 128 | 64 | FP32 (4B) | **80 MB** |
 
 > **Addressing the $O(1)$ Latency Nuance:**
 > End-to-end latency shows a slight sub-linear increase (e.g., 120ms to 160ms) across millions of tokens. This is strictly an I/O artifact of parsing the raw string tokens into the engine. The core holographic field update remains strictly $O(1)$ at ~12ms per matrix projection, regardless of sequence length $N$.
