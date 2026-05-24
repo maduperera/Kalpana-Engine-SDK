@@ -38,8 +38,8 @@ $$\text{VRAM}_{\text{Kalpanā}} = 2 \times layers \times bandwidth \times heads 
 
 This allows the memory footprint to remain strictly **O(1) and user-configurable** via the API:
 
-- **Surgical Resolution (bandwidth = 64):** Perfect for micro-context recall. Per-layer active RIF state = 2 (re+im) × 8 × 64 × 128 × 4 = **0.5 MB**. Full model (32 layers, K+V): **32 MB**.
-- **Medium Resolution (bandwidth = 128):** Ideal for high-fidelity reasoning. Per-layer active RIF = **1 MB**. Full model: **64 MB**.
+- **Surgical Resolution (bandwidth = 64):** Perfect for targeted micro-context fact recall. At bandwidth=64, the full LLaMA-3 8B cache is exactly **32 MB** (constant). It acts like a highly focused scalpel, optimized for locating and extracting isolated facts placed randomly across millions of tokens (Needle-in-a-Haystack recall).
+- **Medium Resolution (bandwidth = 128):** Ideal for high-fidelity contextual reasoning and coherent long-form generation. At bandwidth=128, the full LLaMA-3 8B cache is exactly **64 MB** (constant). It functions like a wide-angle lens, capturing semantic flow, multi-hop logical relationships, and structural transitions with zero repetition or generation noise.
 - **High Resolution (bandwidth = 256):** For demanding multi-document synthesis. Per-layer active RIF = **2 MB**. Full model: **128 MB**.
 - **Hyper-Resolution (bandwidth = 2048):** Maximum quality. Per-layer active RIF = **16 MB**. Full model: **1,024 MB** — still 15× smaller than a standard 128K cache and 350× smaller than a standard 3M cache.
 
@@ -172,7 +172,11 @@ def custom_attention_forward(query, key, value):
 
 ## 5. Performance Benchmarks & Saturation Limits
 
-Kalpanā has been validated extensively across long-context reasoning datasets. The following scaling results demonstrate absolute memory efficiency.
+To substantiate the O(1) constant scaling complexity and retrieval fidelity of the RIF engine, we provide empirical scaling plots across standard hardware configurations (measured using LLaMA-3 8B baseline):
+
+![Benchmark Scaling Plot](benchmark_scaling.png)
+
+The following scaling results demonstrate absolute memory efficiency.
 
 ### A. Cache Scaling Comparison (LLaMA-3 8B)
 

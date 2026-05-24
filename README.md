@@ -138,6 +138,10 @@ We provide strong empirical evidence across memory scaling, latency, complex rea
 > **Addressing the Memory Scaling:**
 > Memory is $O(1)$ strictly with respect to sequence length $N$, but scales with model architecture ($layers \times kv\_heads \times head\_dim$) **and the user-configurable `bandwidth` resolution parameter**. The full formula is: $\text{VRAM} = 2 \times layers \times bandwidth \times kv\_heads \times head\_dim \times bytes$. For LLaMA-3 8B (32 layers, 8 KV heads, 128 dim, FP32) at bandwidth=64, the total model cache is exactly **32 MB** — still 500× smaller than the standard cache at 128K tokens.
 > 
+> *   **Surgical Resolution (bandwidth = 64):** Perfect for targeted micro-context fact recall. At bandwidth=64, the full LLaMA-3 8B cache is exactly **32 MB** (constant). It acts like a highly focused scalpel, optimized for locating and extracting isolated facts placed randomly across millions of tokens (Needle-in-a-Haystack recall).
+> *   **Medium Resolution (bandwidth = 128):** Ideal for high-fidelity contextual reasoning and coherent long-form generation. At bandwidth=128, the full LLaMA-3 8B cache is exactly **64 MB** (constant). It functions like a wide-angle lens, capturing semantic flow, multi-hop logical relationships, and structural transitions with zero repetition or generation noise.
+> 
+> 
 > #### 📐 Constant VRAM & Empirical Accuracy Scaling Table
 > 
 | Model Architecture | Layers | KV Heads | Head Dim | Bandwidth ($B$) | Precision | Calculated Cache Size | Token Length Tested | Retrieval F1 Accuracy |
