@@ -147,6 +147,12 @@ h1, h2, h3, .space-font {
     transform: translateY(1px) !important;
 }
 
+/* Fix all input labels text color for dark theme visibility */
+label, .stWidgetLabel, div[data-testid="stWidgetLabel"] {
+    color: #e5e7eb !important;
+    font-weight: 500 !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 

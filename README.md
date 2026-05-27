@@ -13,6 +13,12 @@ license: "other"
 
 ![Kalpanā](kalpana-logo.png)
 
+## 🔮 Live Interactive Showcase
+Experience the breakthrough scaling capabilities of the Kalpanā Holographic Engine directly in your browser. Run Needle-in-a-Haystack sweeps, visualize continuous complex phase helices, and calculate your business's HBM hosting savings in real-time:
+👉 **[Launch Live Hugging Face Demo Space](https://huggingface.co/spaces/MaduRox/Kalpana-Demo)**
+
+---
+
 ```mermaid
 graph TD
     subgraph "Foundational AI Labs (B2B Core)"
