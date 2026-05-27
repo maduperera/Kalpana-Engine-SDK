@@ -512,7 +512,7 @@ with tab2:
                 plot_bgcolor="rgba(0,0,0,0)",
                 legend=dict(x=0.05, y=0.9, bgcolor="rgba(17,24,39,0.7)"),
                 height=280,
-                xaxis=dict(showgrid=True, gridcolor="rgba(124,58,237,0.1)", suffix="%"),
+                xaxis=dict(showgrid=True, gridcolor="rgba(124,58,237,0.1)", ticksuffix="%"),
                 yaxis=dict(showgrid=True, gridcolor="rgba(124,58,237,0.1)", range=[0, 1.1])
             )
             
