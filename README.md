@@ -1,23 +1,24 @@
----
-title: "Kalpanā Holographic RIF Engine"
-emoji: "🔮"
-colorFrom: "purple"
-colorTo: "indigo"
-sdk: "docker"
-pinned: true
-license: "other"
----
-
 # Kalpanā Python SDK
-
 
 ![Kalpanā](kalpana-logo.png)
 
-## 🔮 Live Interactive Showcase
-Experience the breakthrough scaling capabilities of the Kalpanā Holographic Engine directly in your browser. Run Needle-in-a-Haystack sweeps, visualize continuous complex phase helices, and calculate your business's HBM hosting savings in real-time:
-👉 **[Launch Live Hugging Face Demo Space](https://huggingface.co/spaces/MaduRox/Kalpana-Demo)**
+## 🔮 Live Interactive Demo & Showcase
+Experience the breakthrough scaling capabilities of the **Kalpanā Holographic Engine** directly in your browser. We have built and hosted an interactive developer console on **Hugging Face Spaces** to showcase RIF in real-time.
+
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A5%97%20Hugging%20Face-Space-blue?style=for-the-badge&color=8b5cf6&logoColor=white)](https://huggingface.co/spaces/MaduRox/Kalpana-Demo)
+[![SDK Documentation](https://img.shields.io/badge/Read-Whitepaper-blue?style=for-the-badge&color=2563eb)](WHITE_PAPER.md)
+[![License](https://img.shields.io/badge/License-Business%20Source%201.1-green?style=for-the-badge&color=059669)](LICENSE.md)
+
+### 🚀 **[Launch Live Demo Space](https://huggingface.co/spaces/MaduRox/Kalpana-Demo)**
+
+#### **What you can explore in the live app:**
+1. **🏠 Interactive Physics & RIF Helix Visualizer:** Interact with a live 3D phase helix (representing complex Euler coordinates $S_{re} + i S_{im}$) to see how continuous frequency vectors accumulate and reconstruct context memory.
+2. **🎯 Needle-in-a-Haystack Simulator:** Challenge the holographic RIF sweep. Embed a secret passcode at any depth across up to 3,000,000 (3M) tokens and watch the engine locate it in under 15 milliseconds with **99.9% recall accuracy**.
+3. **⚡ Enterprise ROI & Cost Calculator:** Model your startup or enterprise workload (concurrent users, context history, model specs) to see real-time comparisons of HBM memory and annual GPU hosting bills (proving up to **98%+ cost savings**).
+4. **🔌 Code Playground:** Copy copy-pasteable integrations for HuggingFace `past_key_values`, direct PyTorch tensor loops, and edge C++ integrations.
 
 ---
+
 
 ```mermaid
 graph TD
