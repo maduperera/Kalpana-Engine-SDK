@@ -127,6 +127,26 @@ h1, h2, h3, .space-font {
     border-radius: 12px !important;
 }
 
+/* Style Streamlit Buttons (fix white-on-white text issues) */
+.stButton > button {
+    background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 24px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+.stButton > button:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5) !important;
+    color: #ffffff !important;
+}
+.stButton > button:active {
+    transform: translateY(1px) !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -168,10 +188,22 @@ with st.sidebar:
     active_cfg = model_configs[preset_model]
     
     st.markdown("### 📐 Active Parameters")
-    st.markdown(f"**Layers:** `{active_cfg['layers']}`")
-    st.markdown(f"**KV Heads:** `{active_cfg['heads']}`")
-    st.markdown(f"**Head Dim:** `{active_cfg['dim']}`")
-    st.markdown(f"**Base Size:** `{active_cfg['params']}`")
+    st.markdown(
+        f'**Layers:** <span style="color: #a78bfa; font-weight: 600;">{active_cfg["layers"]}</span>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        f'**KV Heads:** <span style="color: #a78bfa; font-weight: 600;">{active_cfg["heads"]}</span>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        f'**Head Dim:** <span style="color: #a78bfa; font-weight: 600;">{active_cfg["dim"]}</span>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        f'**Base Size:** <span style="color: #a78bfa; font-weight: 600;">{active_cfg["params"]}</span>',
+        unsafe_allow_html=True
+    )
     
     st.markdown("---")
     st.caption("Kalpanā is designed by Vijñāna AI. Patent Pending LK/P/1/24089.")
