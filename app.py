@@ -153,6 +153,50 @@ label, .stWidgetLabel, div[data-testid="stWidgetLabel"] {
     font-weight: 500 !important;
 }
 
+/* Fix main top header bar background color (eliminate white rectangle) */
+header, [data-testid="stHeader"] {
+    background-color: transparent !important;
+}
+
+/* Style Tabs Container (fix white rectangle and unselected tabs) */
+div[data-testid="stTabs"] {
+    background-color: transparent !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2) !important;
+}
+div[data-testid="stTabs"] button {
+    color: #9ca3af !important; /* Unselected tab text color */
+    background-color: transparent !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+}
+div[data-testid="stTabs"] button[aria-selected="true"] {
+    color: #a78bfa !important; /* Selected tab text color (purple) */
+    border-bottom: 2px solid #7c3aed !important;
+}
+div[data-testid="stTabs"] button:hover {
+    color: #ffffff !important;
+}
+
+/* Style Sidebar elements for absolute visibility */
+section[data-testid="stSidebar"] {
+    background-color: #0b0f19 !important;
+}
+section[data-testid="stSidebar"] h1, 
+section[data-testid="stSidebar"] h2, 
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] strong {
+    color: #ffffff !important;
+}
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] span {
+    color: #e5e7eb !important;
+}
+section[data-testid="stSidebar"] caption,
+section[data-testid="stSidebar"] div[data-testid="stCaptionContainer"] {
+    color: #9ca3af !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
