@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vijñāna AI — Investor Deck</title>
+    <meta name="description" content="Vijñāna AI Seed Round Investor Presentation — The Bounded-Memory Layer for AI Infrastructure">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ══════════════════════════════════════════════════════════
+           DESIGN SYSTEM
+           ══════════════════════════════════════════════════════════ */
+        :root {
+            --bg-deep: #020617;
+            --bg-card: rgba(30, 41, 59, 0.45);
+            --bg-card-hover: rgba(30, 41, 59, 0.65);
+            --border-subtle: rgba(102, 242, 255, 0.12);
+            --border-accent: rgba(102, 242, 255, 0.35);
+            --border-warn: rgba(255, 143, 143, 0.35);
+            --border-good: rgba(222, 255, 154, 0.35);
+
+            --accent-cyan: #66f2ff;
+            --accent-lime: #deff9a;
+            --accent-rose: #ff8f8f;
+            --accent-violet: #c084fc;
+
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --slide-w: 1280px;
+            --slide-h: 720px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Slide Container ──────────────────────────────────── */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 80%, rgba(102, 242, 255, 0.03) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 80% 20%, rgba(222, 255, 154, 0.02) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .slide-inner {
+            width: min(var(--slide-w), 92vw);
+            max-height: 90vh;
+            padding: 40px 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Slide Number ─────────────────────────────────────── */
+        .slide-num {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            z-index: 2;
+        }
+
+        /* ── Typography ───────────────────────────────────────── */
+        h1 {
+            font-size: clamp(48px, 6vw, 80px);
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1.05;
+        }
+
+        h2.slide-title {
+            font-size: clamp(24px, 3vw, 34px);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-lime));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-lime));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: clamp(18px, 2.2vw, 26px);
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-top: 10px;
+        }
+
+        /* ── Cards / Tiles ────────────────────────────────────── */
+        .tile {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s, transform 0.2s;
+        }
+        .tile:hover {
+            border-color: var(--border-accent);
+            transform: translateY(-2px);
+        }
+
+        .tile-warn { border-color: var(--border-warn); background: rgba(255, 143, 143, 0.04); }
+        .tile-good { border-color: var(--border-good); background: rgba(222, 255, 154, 0.04); }
+        .tile-accent { border-color: var(--border-accent); background: rgba(102, 242, 255, 0.04); }
+
+        /* ── Layout ────────────────────────────────────────────── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+        }
+
+        .four-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 14px;
+        }
+
+        /* ── Lists ─────────────────────────────────────────────── */
+        ul { padding-left: 18px; }
+        li {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            line-height: 1.45;
+        }
+        li strong { color: var(--text-primary); }
+
+        /* ── Tables ────────────────────────────────────────────── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th {
+            padding: 8px 10px;
+            text-align: left;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-accent);
+        }
+        td {
+            padding: 8px 10px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        tr:last-child td { border-bottom: none; }
+
+        /* ── Stat Box ──────────────────────────────────────────── */
+        .stat {
+            text-align: center;
+            padding: 20px;
+        }
+        .stat-value {
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* ── Badge ─────────────────────────────────────────────── */
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .badge-cyan { background: rgba(102, 242, 255, 0.12); color: var(--accent-cyan); }
+        .badge-lime { background: rgba(222, 255, 154, 0.12); color: var(--accent-lime); }
+        .badge-rose { background: rgba(255, 143, 143, 0.12); color: var(--accent-rose); }
+
+        /* ── Bar Chart ─────────────────────────────────────────── */
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .bar-label { width: 100px; font-size: 12px; color: var(--text-muted); text-align: right; font-weight: 500; }
+        .bar-track {
+            flex: 1;
+            height: 24px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--bg-deep);
+            white-space: nowrap;
+            transition: width 0.6s ease;
+        }
+        .bar-cyan { background: linear-gradient(90deg, var(--accent-cyan), #38bdf8); }
+        .bar-lime { background: linear-gradient(90deg, var(--accent-lime), #a3e635); }
+        .bar-rose { background: linear-gradient(90deg, var(--accent-rose), #f87171); }
+        .bar-violet { background: linear-gradient(90deg, var(--accent-violet), #a78bfa); }
+
+        /* ── Timeline ──────────────────────────────────────────── */
+        .timeline {
+            display: flex;
+            gap: 0;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-lime));
+            opacity: 0.3;
+        }
+        .tl-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding: 0 10px;
+        }
+        .tl-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            margin: 12px auto 12px;
+            border: 3px solid var(--bg-deep);
+            box-shadow: 0 0 10px rgba(102, 242, 255, 0.4);
+        }
+        .tl-item:nth-child(2) .tl-dot { background: var(--accent-lime); box-shadow: 0 0 10px rgba(222, 255, 154, 0.4); }
+        .tl-item:nth-child(3) .tl-dot { background: var(--accent-violet); box-shadow: 0 0 10px rgba(192, 132, 252, 0.4); }
+
+        /* ── Pipeline Diagram ──────────────────────────────────── */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+        }
+        .pipe-node {
+            text-align: center;
+            padding: 18px 22px;
+            border-radius: 14px;
+            min-width: 140px;
+        }
+        .pipe-arrow {
+            font-size: 24px;
+            color: var(--text-muted);
+            padding: 0 6px;
+        }
+
+        /* ── Navigation Dots ──────────────────────────────────── */
+        .nav-dots {
+            position: fixed;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            opacity: 0.4;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        .nav-dot.active {
+            background: var(--accent-cyan);
+            opacity: 1;
+            transform: scale(1.4);
+            box-shadow: 0 0 8px rgba(102, 242, 255, 0.5);
+        }
+
+        /* ── Team Card ─────────────────────────────────────────── */
+        .team-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-cyan);
+            box-shadow: 0 0 25px rgba(102, 242, 255, 0.3);
+            object-fit: cover;
+        }
+
+        /* ── Animations ────────────────────────────────────────── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-inner > * {
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 242, 255, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(102, 242, 255, 0.4); }
+        }
+
+        /* ── Responsive ────────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .two-col, .three-col, .four-col { grid-template-columns: 1fr; }
+            .slide-inner { padding: 20px; }
+            .pipeline { flex-direction: column; }
+            .pipe-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Dots -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 1 — TITLE
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s1">
+    <div class="slide-inner" style="text-align: center;">
+        <div style="margin-bottom: 30px;">
+            <span class="badge badge-lime" style="font-size: 13px; padding: 5px 16px;">SEED ROUND · $2.5M</span>
+        </div>
+        <h1 style="margin-bottom: 8px;">
+            <span class="gradient-text">KALPANĀ</span>
+        </h1>
+        <p class="subtitle" style="font-size: 28px; font-weight: 300; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
+            The Bounded-Memory Layer for Cloud & 100% Offline Edge Inference
+        </p>
+        <p style="font-size: 15px; color: var(--text-muted); margin-top: 30px; font-weight: 500;">
+            by <strong style="color: var(--accent-cyan);">Vijñāna AI</strong>
+        </p>
+        <div style="margin-top: 50px; display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+            <div class="stat">
+                <div class="stat-value gradient-text">O(1)</div>
+                <div class="stat-label">Memory Scaling</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" style="color: var(--accent-lime);">6.3 MB</div>
+                <div class="stat-label">Fixed RIF State</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" style="color: var(--accent-cyan);">Edge AI</div>
+                <div class="stat-label">3M Tokens Offline</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" style="color: var(--accent-violet);">PCT</div>
+                <div class="stat-label">Patent Filed</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">01 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 2 — THE SCALING WALL (data-driven)
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s2">
+    <div class="slide-inner">
+        <div style="margin-bottom: 6px;">
+            <span class="badge badge-rose" style="font-size: 11px; padding: 4px 12px;">ELIMINATING THE "GPU TAX"</span>
+        </div>
+        <h2 class="slide-title" style="margin-bottom: 16px;">The KV-Cache Scaling Wall</h2>
+        <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 20px; max-width: 850px;">
+            Today, <strong style="color: var(--accent-rose);">70–80% of AI capital is burned on the "GPU Tax"</strong> — storing linear KV-Cache history in expensive VRAM. Here's what happens on a single <strong>A100 80 GB</strong> running Llama-3 8B:
+        </p>
+
+        <!-- Main comparison table -->
+        <div class="tile" style="padding: 0; overflow: hidden; margin-bottom: 16px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                <thead>
+                    <tr style="background: rgba(56, 189, 248, 0.08);">
+                        <th style="padding: 12px 14px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Segment</th>
+                        <th style="padding: 12px 10px; text-align: center; font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Context (tokens)</th>
+                        <th style="padding: 12px 10px; text-align: center; font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Traditional KV / User</th>
+                        <th style="padding: 12px 10px; text-align: center; font-size: 11px; color: var(--accent-rose); text-transform: uppercase; font-weight: 700;">Traditional* users</th>
+                        <th style="padding: 12px 10px; text-align: center; font-size: 11px; color: var(--accent-lime); text-transform: uppercase; font-weight: 700;">Kalpanā RIF users</th>
+                        <th style="padding: 12px 10px; text-align: center; font-size: 11px; color: var(--accent-cyan); text-transform: uppercase; font-weight: 700;">Advantage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 11px 14px;">Casual Users <span style="color: var(--text-muted); font-size: 11px;">(60%)</span></td>
+                        <td style="padding: 11px 10px; text-align: center;">2K</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--text-muted);">256 MB</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose); font-weight: 600;">290</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">10,000 Contexts</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-cyan); font-weight: 700;">34×</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 11px 14px;">API Developers <span style="color: var(--text-muted); font-size: 11px;">(25%)</span></td>
+                        <td style="padding: 11px 10px; text-align: center;">8K</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--text-muted);">1 GB</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose); font-weight: 600;">75</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">10,000 Contexts</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-cyan); font-weight: 700;">133×</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 11px 14px;">Enterprise / RAG <span style="color: var(--text-muted); font-size: 11px;">(12%)</span></td>
+                        <td style="padding: 11px 10px; text-align: center;">32K</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--text-muted);">4 GB</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose); font-weight: 600;">19</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">10,000 Contexts</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-cyan); font-weight: 700;">526×</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 11px 14px;">Long-doc Analysis <span style="color: var(--text-muted); font-size: 11px;">(3%)</span></td>
+                        <td style="padding: 11px 10px; text-align: center;">128K</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--text-muted);">16 GB</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose); font-weight: 600;">5</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">10,000 Contexts</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-cyan); font-weight: 700;">2,000×</td>
+                    </tr>
+                    <tr style="background: rgba(244, 63, 94, 0.06);">
+                        <td style="padding: 11px 14px;">3M+ Context <span style="color: var(--text-muted); font-size: 11px;">(Knowledge Packs)</span></td>
+                        <td style="padding: 11px 10px; text-align: center;">3M</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose);">384 GB</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose); font-weight: 700; font-size: 14px;">0 ❌</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">10,000 Contexts</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-cyan); font-weight: 700;">10,000× Advantage</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Cost breakdown -->
+        <div class="tile" style="padding: 16px 20px; margin-bottom: 0;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <i class="fa-solid fa-dollar-sign" style="color: var(--accent-cyan); font-size: 13px;"></i>
+                <span style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">What this means in dollars</span>
+                <span style="font-size: 11px; color: var(--text-muted); margin-left: auto;">1× A100 80GB ≈ $3/hr = $2,160/month</span>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <!-- Traditional cost -->
+                <div style="flex: 1; padding: 12px 14px; background: rgba(244,63,94,0.05); border-radius: 8px; border: 1px solid rgba(244,63,94,0.12);">
+                    <div style="font-size: 10px; color: var(--accent-rose); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Traditional — cost per user/month (persistent state)</div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <div style="text-align: center; flex: 1; min-width: 50px;">
+                            <div style="font-size: 14px; font-weight: 800; color: var(--text-muted);">$7.45</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">2K ctx</div>
+                        </div>
+                        <div style="text-align: center; flex: 1; min-width: 50px;">
+                            <div style="font-size: 14px; font-weight: 800; color: var(--accent-rose);">$28.80</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">8K ctx</div>
+                        </div>
+                        <div style="text-align: center; flex: 1; min-width: 50px;">
+                            <div style="font-size: 14px; font-weight: 800; color: var(--accent-rose);">$114</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">32K ctx</div>
+                        </div>
+                        <div style="text-align: center; flex: 1; min-width: 50px;">
+                            <div style="font-size: 14px; font-weight: 800; color: var(--accent-rose);">$432</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">128K ctx</div>
+                        </div>
+                        <div style="text-align: center; flex: 1; min-width: 50px;">
+                            <div style="font-size: 14px; font-weight: 800; color: var(--accent-rose);">∞</div>
+                            <div style="font-size: 9px; color: var(--text-muted);">1M ctx</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- RIF cost -->
+                <div style="flex: 0 0 140px; padding: 12px 14px; background: rgba(163,230,53,0.05); border-radius: 8px; border: 1px solid rgba(163,230,53,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="font-size: 10px; color: var(--accent-lime); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Kalpanā RIF</div>
+                    <div style="font-size: 26px; font-weight: 900; color: var(--accent-lime);">$0.22</div>
+                    <div style="font-size: 10px; color: var(--text-muted);">per user/month</div>
+                    <div style="font-size: 9px; color: var(--accent-lime); margin-top: 2px;">any context length</div>
+                </div>
+            </div>
+            <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted); padding: 8px 10px; background: rgba(56,189,248,0.04); border-radius: 6px;">
+                <strong style="color: var(--accent-cyan);">Key insight:</strong> With Kalpanā RIF, persistent document context memory costs only <strong style="color: var(--accent-lime);">$0.22/user/month</strong> regardless of context length (2K to 3M tokens), while traditional context memory explodes to over <strong style="color: var(--accent-rose);">$432/user/month</strong>!
+            </div>
+        </div>
+
+        <p style="font-size: 10px; color: var(--text-muted); margin-top: 12px; text-align: right;">
+            *Traditional = RAG + vLLM + PagedAttention + GQA + INT8 KV quantization (best-case optimized stack) · Traffic data: <em>Token Usage Guide 2026</em>, Iternal Technologies
+        </p>
+    </div>
+    <div class="slide-num">02 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 3 — RIF vs ENTERPRISE RAG STACK
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s2b">
+    <div class="slide-inner">
+        <h2 class="slide-title">What About RAG? Everyone Uses It.</h2>
+        <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 20px; max-width: 800px;">
+            Enterprises don't use raw KV-Cache for long documents — they use <strong style="color: var(--accent-cyan);">RAG</strong> (Retrieval-Augmented Generation). But RAG trades <strong style="color: var(--accent-rose);">accuracy for efficiency</strong>.
+        </p>
+
+        <div class="two-col" style="margin-bottom: 16px;">
+            <!-- LEFT: Enterprise RAG Stack -->
+            <div class="tile tile-warn" style="padding: 18px;">
+                <h3 style="color: var(--accent-rose); font-size: 15px; margin-bottom: 14px;">
+                    <i class="fa-solid fa-layer-group" style="margin-right: 8px;"></i>Enterprise RAG Stack (Today)
+                </h3>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(244,63,94,0.05); border-radius: 6px;">
+                        <span style="color: var(--accent-rose); width: 16px; text-align: center;">1</span>
+                        <span>Chunking pipeline</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(244,63,94,0.05); border-radius: 6px;">
+                        <span style="color: var(--accent-rose); width: 16px; text-align: center;">2</span>
+                        <span>Embedding model (OpenAI / Cohere)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(244,63,94,0.05); border-radius: 6px;">
+                        <span style="color: var(--accent-rose); width: 16px; text-align: center;">3</span>
+                        <span>Vector database (Pinecone ~$70/mo)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(244,63,94,0.05); border-radius: 6px;">
+                        <span style="color: var(--accent-rose); width: 16px; text-align: center;">4</span>
+                        <span>Reranker model</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(244,63,94,0.05); border-radius: 6px;">
+                        <span style="color: var(--accent-rose); width: 16px; text-align: center;">5</span>
+                        <span>LLM inference (vLLM / TGI)</span>
+                    </div>
+                </div>
+                <div style="margin-top: 14px; padding: 10px 12px; background: rgba(244,63,94,0.06); border-radius: 8px; border: 1px solid rgba(244,63,94,0.15);">
+                    <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Retrieval per query</div>
+                    <div style="font-size: 22px; font-weight: 800; color: var(--accent-rose);">~1% <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">of document</span></div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Model sees fragments, not the full picture</div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Kalpana RIF -->
+            <div class="tile tile-good" style="padding: 18px;">
+                <h3 style="color: var(--accent-lime); font-size: 15px; margin-bottom: 14px;">
+                    <i class="fa-solid fa-cube" style="margin-right: 8px;"></i>Kalpanā RIF (Replacement)
+                </h3>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(163,230,53,0.05); border-radius: 6px;">
+                        <span style="color: var(--accent-lime); width: 16px; text-align: center;">1</span>
+                        <span>LLM + RIF layer <strong style="color: var(--accent-lime);">(that's it)</strong></span>
+                    </div>
+                </div>
+                <div style="margin-top: 14px; padding: 10px 12px; background: rgba(163,230,53,0.06); border-radius: 8px; border: 1px solid rgba(163,230,53,0.15);">
+                    <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Context retained</div>
+                    <div style="font-size: 22px; font-weight: 800; color: var(--accent-lime);">100% <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">of document</span></div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Full context compressed into O(1) RIF state</div>
+                </div>
+
+                <!-- Comparison stats -->
+                <div style="display: flex; gap: 12px; margin-top: 14px;">
+                    <div style="flex: 1; text-align: center; padding: 10px; background: rgba(163,230,53,0.04); border-radius: 8px;">
+                        <div style="font-size: 18px; font-weight: 800; color: var(--accent-lime);">1,300+</div>
+                        <div style="font-size: 10px; color: var(--text-muted);">users / A100</div>
+                    </div>
+                    <div style="flex: 1; text-align: center; padding: 10px; background: rgba(163,230,53,0.04); border-radius: 8px;">
+                        <div style="font-size: 18px; font-weight: 800; color: var(--accent-lime);">10,000</div>
+                        <div style="font-size: 10px; color: var(--text-muted);">3M packs in 63GB</div>
+                    </div>
+                    <div style="flex: 1; text-align: center; padding: 10px; background: rgba(163,230,53,0.04); border-radius: 8px;">
+                        <div style="font-size: 18px; font-weight: 800; color: var(--accent-cyan);">260–10,000×</div>
+                        <div style="font-size: 10px; color: var(--text-muted);">density advantage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom callout -->
+        <div class="tile" style="padding: 14px 20px; text-align: center;">
+            <span style="font-size: 14px; color: var(--text-secondary);">
+                <strong style="color: var(--accent-cyan);">The real question:</strong> Why maintain 5 services to see 1% of your document when RIF sees <strong style="color: var(--accent-lime);">100%</strong> in a single bounded state — on the <strong>same GPU</strong>?
+            </span>
+        </div>
+    </div>
+    <div class="slide-num">03 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 3 — WHAT KALPANA DOES
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s3">
+    <div class="slide-inner">
+        <h2 class="slide-title">What Kalpanā Does</h2>
+        <p style="font-size: 16px; color: var(--text-secondary); margin-bottom: 12px; max-width: 900px; line-height: 1.5;">
+            Kalpanā replaces standard prompt re-transmission with a <strong style="color: var(--accent-cyan);">fixed 6.3 MB RIF memory state</strong>. Context is compressed into complex frequency phase channels — keeping memory 100% constant regardless of input length.
+        </p>
+        <p style="font-size: 14px; color: var(--accent-lime); margin-bottom: 20px; max-width: 900px; line-height: 1.5; font-weight: 500;">
+            <i class="fa-solid fa-mobile-screen" style="margin-right: 6px;"></i> Unlocks Consumer-Grade Edge AI: Runs a massive 3,000,000 token context window 100% offline on a standard iPhone or Android device via WebGPU (Qwen 1.5 0.5B in a fixed 6.3 MB VRAM profile).
+        </p>
+
+        <!-- Pipeline Diagram -->
+        <div class="pipeline" style="margin-bottom: 20px;">
+            <div class="pipe-node tile tile-warn" style="min-width: 160px;">
+                <i class="fa-solid fa-layer-group" style="font-size: 28px; color: var(--accent-rose); margin-bottom: 8px; display: block;"></i>
+                <div style="font-size: 13px; font-weight: 700; color: var(--accent-rose);">Input Document</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Up to 3.27M Tokens</div>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-node tile tile-accent" style="min-width: 180px; animation: pulse-glow 3s infinite;">
+                <i class="fa-solid fa-atom" style="font-size: 28px; color: var(--accent-cyan); margin-bottom: 8px; display: block;"></i>
+                <div style="font-size: 13px; font-weight: 700; color: var(--accent-cyan);">Kalpanā RIF Engine</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Holographic Phase Encoding</div>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-node tile tile-good" style="min-width: 160px;">
+                <i class="fa-solid fa-cube" style="font-size: 28px; color: var(--accent-lime); margin-bottom: 8px; display: block;"></i>
+                <div style="font-size: 13px; font-weight: 700; color: var(--accent-lime);">Fixed 6.3 MB State</div>
+                <div style="font-size: 11px; color: var(--text-muted);">2,048 Frequency Bands</div>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-node tile" style="min-width: 160px;">
+                <i class="fa-solid fa-bolt" style="font-size: 28px; color: var(--accent-violet); margin-bottom: 8px; display: block;"></i>
+                <div style="font-size: 13px; font-weight: 700; color: var(--accent-violet);">LLM Inference</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Under 1,000 Tokens</div>
+            </div>
+        </div>
+
+        <!-- 10,000 CONCURRENT CONTEXTS COMPARISON TABLE -->
+        <div class="tile tile-good" style="padding: 16px 20px; border: 1px solid rgba(163,230,53,0.3);">
+            <h3 style="color: var(--accent-lime); font-size: 15px; margin-bottom: 10px;">
+                <i class="fa-solid fa-server" style="margin-right: 8px;"></i>10,000 Active 3M-Token Context Density on a Single GPU
+            </h3>
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                <thead>
+                    <tr style="background: rgba(56, 189, 248, 0.08);">
+                        <th style="padding: 8px 10px; text-align: left; color: var(--text-muted);">Infrastructure Metric</th>
+                        <th style="padding: 8px 10px; text-align: center; color: var(--accent-rose); font-weight: 700;">Standard Cloud API (15,000 GPUs)</th>
+                        <th style="padding: 8px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">Kalpanā RIF Substrate (1 GPU)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 8px 10px; font-weight: 600;">Memory to Hold 10,000 × 3M-Token Contexts</td>
+                        <td style="padding: 8px 10px; text-align: center; color: var(--accent-rose);">1.2 PETABYTES of VRAM (15,000 GPUs)</td>
+                        <td style="padding: 8px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">63 GB of RAM (1 GPU)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 8px 10px; font-weight: 600;">Server Hardware Cost</td>
+                        <td style="padding: 8px 10px; text-align: center; color: var(--accent-rose);">$450,000,000 (15,000 GPUs)</td>
+                        <td style="padding: 8px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">$15,000 (1 GPU)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 10px; font-weight: 600;">Infrastructure Capacity Advantage</td>
+                        <td style="padding: 8px 10px; text-align: center; color: var(--text-muted);">Baseline (1×)</td>
+                        <td style="padding: 8px 10px; text-align: center; color: var(--accent-cyan); font-weight: 700;">10,000× Capacity Multiplication</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="slide-num">03 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 4 — LIVE DEMO EVIDENCE
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s4">
+    <div class="slide-inner">
+        <h2 class="slide-title">Working Today — Cloud Playgrounds & 100% Offline Edge App</h2>
+        <div class="four-col" style="margin-bottom: 20px;">
+            <!-- Tile 1: API -->
+            <div class="tile tile-accent" style="text-align: center; padding: 16px 12px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span class="badge badge-lime">LIVE API</span>
+                    <h3 style="margin-top: 10px; color: var(--accent-cyan); font-size: 14px;">Kalpanā API</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 6px 0; line-height: 1.4;">OpenAI-compatible endpoints (Llama-3 8B, Qwen 0.5B) for cloud developers</p>
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 8px; word-break: break-all;">madurox-kalpana-api-public.hf.space</div>
+            </div>
+            <!-- Tile 2: Cloud Chat -->
+            <div class="tile tile-accent" style="text-align: center; padding: 16px 12px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span class="badge badge-lime">LIVE CLOUD</span>
+                    <h3 style="margin-top: 10px; color: var(--accent-cyan); font-size: 14px;">Cloud Playground</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 6px 0; line-height: 1.4;">Try Llama-3 8B + Kalpanā Memory in-browser on hosted Hugging Face spaces</p>
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 8px;">MaduRox/Kalpana-Chat</div>
+            </div>
+            <!-- Tile 3: Offline Edge App with QR Code -->
+            <div class="tile tile-good" style="text-align: center; padding: 16px 12px; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.04);">
+                <div>
+                    <span class="badge badge-lime" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-lime);">LIVE EDGE</span>
+                    <h3 style="margin-top: 10px; color: var(--accent-lime); font-size: 14px;">100% Offline App</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 4px 0 6px 0; line-height: 1.4;">Run 3M tokens local context on mobile/PC via WebGPU (Qwen 1.5 0.5B + 6.3MB VRAM)</p>
+                </div>
+                <div>
+                    <div style="background: #ffffff; padding: 5px; border-radius: 8px; display: inline-block;">
+                        <img src="KalpanaAI_QR.png" alt="Scan to test" style="width: 72px; height: 72px; display: block; object-fit: contain;">
+                    </div>
+                    <div style="font-size: 9px; color: var(--text-muted); margin-top: 3px; font-weight: 600;">Scan phone camera to test live</div>
+                </div>
+            </div>
+            <!-- Tile 4: Benchmark Suite -->
+            <div class="tile tile-accent" style="text-align: center; padding: 16px 12px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span class="badge badge-lime">LIVE BENCHMARK</span>
+                    <h3 style="margin-top: 10px; color: var(--accent-cyan); font-size: 14px;">Benchmark Suite</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 6px 0; line-height: 1.4;">Side-by-side RIF vs standard KV-cache scaling metrics comparison</p>
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 8px; word-break: break-all;">MaduRox/Kalpana-Multi-Model-Benchmark</div>
+            </div>
+        </div>
+        <div class="tile" style="padding: 18px;">
+            <h3 style="color: var(--accent-lime); margin-bottom: 12px;"><i class="fa-solid fa-flask-vial" style="margin-right: 8px;"></i>Verified Results</h3>
+            <div class="two-col" style="gap: 30px;">
+                <div>
+                    <table>
+                        <thead><tr><th>Metric</th><th>Standard</th><th>Kalpanā RIF</th></tr></thead>
+                        <tbody>
+                            <tr><td>Memory per session (3M ctx)</td><td style="color: var(--accent-rose); font-weight: 600;">384 GB</td><td style="color: var(--accent-lime); font-weight: 600;">6.3 MB <span style="font-size: 10px; font-weight: 400;">(60,000× smaller)</span></td></tr>
+                            <tr><td>Active Contexts in 63GB RAM</td><td style="color: var(--accent-rose);">0 ❌</td><td style="color: var(--accent-lime); font-weight: 600;">10,000 Contexts</td></tr>
+                            <tr><td>Cold start (3M tokens)</td><td style="color: var(--accent-rose);">Minutes</td><td style="color: var(--accent-lime);">Milliseconds</td></tr>
+                            <tr><td>Context window limit</td><td style="color: var(--text-muted);">VRAM-bound</td><td style="color: var(--accent-lime);">Unlimited</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+                        <strong style="color: var(--accent-cyan);">Knowledge Packs (.kp):</strong> Compile any document into a portable binary (size scales with content). Share with anyone. Instant context loading — no re-processing.
+                    </p>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">
+                        Scientific paper published as preprint on Zenodo. PCT international patent filed.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Packs emphasis -->
+        <div class="tile tile-good" style="padding: 18px; border: 1px solid rgba(163,230,53,0.3);">
+            <h3 style="color: var(--accent-lime); margin-bottom: 10px;"><i class="fa-solid fa-cube" style="margin-right: 8px;"></i>Knowledge Packs (.kp) — No Competitor Has This</h3>
+            <div class="two-col" style="gap: 20px;">
+                <div>
+                    <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
+                        <strong style="color: var(--accent-cyan);">Compile once → query forever.</strong> Any document (PDF, codebase, legal filing) is compressed into a portable .kp binary containing the full RIF state. Load it on any compatible model in <strong>milliseconds</strong> — zero re-processing.
+                    </p>
+                </div>
+                <div>
+                    <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
+                        <strong style="color: var(--accent-cyan);">Sharable knowledge.</strong> Email a .kp file to a colleague — they load it and instantly have the same full-context understanding. Like sending a "brain" for a document. <strong>This is a new product category.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">05 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 5 — WHERE THE VALUE IS
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s5">
+    <div class="slide-inner">
+        <h2 class="slide-title">The Business: Three Revenue Engines</h2>
+        <div class="three-col">
+            <!-- Engine 1: Licensing -->
+            <div class="tile tile-good" style="padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <span class="badge badge-lime">PRIMARY · 70%</span>
+                </div>
+                <h3 style="color: var(--accent-lime);">Technology Licensing</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">License the RIF compiler & embedded weights to cloud providers and enterprises running their own inference.</p>
+                <table style="font-size: 12px;">
+                    <tbody>
+                        <tr><td style="color: var(--text-muted);">Cloud provider license</td><td style="color: var(--accent-lime); font-weight: 600;">$500K–$2M/yr</td></tr>
+                        <tr><td style="color: var(--text-muted);">Enterprise model compile</td><td style="color: var(--accent-lime); font-weight: 600;">$50K–$250K</td></tr>
+                        <tr><td style="color: var(--text-muted);">Gross margin</td><td style="color: var(--accent-lime); font-weight: 600;">~95%</td></tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Compile once → license many. Near-zero COGS.</p>
+            </div>
+
+            <!-- Engine 2: Cloud API -->
+            <div class="tile tile-accent" style="padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <span class="badge badge-cyan">SECONDARY · 20%</span>
+                </div>
+                <h3 style="color: var(--accent-cyan);">Cloud API (MaaS)</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Usage-based API for developers. Profitable via Knowledge Pack queries where context is free to hold.</p>
+                <table style="font-size: 12px;">
+                    <tbody>
+                        <tr><td style="color: var(--text-muted);">KP query price</td><td style="color: var(--accent-cyan); font-weight: 600;">$5/1M tokens</td></tr>
+                        <tr><td style="color: var(--text-muted);">Free tier</td><td style="color: var(--text-secondary);">3M tokens/mo</td></tr>
+                        <tr><td style="color: var(--text-muted);">Gross margin</td><td style="color: var(--accent-cyan); font-weight: 600;">~60%</td></tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Land & expand: free → paid → enterprise.</p>
+            </div>
+
+            <!-- Engine 3: Marketplace -->
+            <div class="tile" style="padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <span class="badge" style="background: rgba(192,132,252,0.12); color: var(--accent-violet);">FUTURE · 10%</span>
+                </div>
+                <h3 style="color: var(--accent-violet);">Knowledge Pack Marketplace</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Pre-compiled .kp packs for legal, medical, code verticals. Shared knowledge economy.</p>
+                <table style="font-size: 12px;">
+                    <tbody>
+                        <tr><td style="color: var(--text-muted);">Pack price</td><td style="color: var(--accent-violet); font-weight: 600;">$10–$100</td></tr>
+                        <tr><td style="color: var(--text-muted);">Custom compilation</td><td style="color: var(--accent-violet); font-weight: 600;">$500–$5K</td></tr>
+                        <tr><td style="color: var(--text-muted);">Platform take rate</td><td style="color: var(--accent-violet); font-weight: 600;">20%</td></tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Marketplace launches Month 9+.</p>
+            </div>
+        </div>
+        <div class="tile" style="margin-top: 16px; padding: 14px 20px; text-align: center;">
+            <span style="font-size: 13px; color: var(--text-secondary);">
+                <strong style="color: var(--accent-lime);">Key insight:</strong> We don't compete with OpenAI on price. We sell the <em>infrastructure layer</em> that makes ALL inference providers more efficient.
+            </span>
+        </div>
+    </div>
+    <div class="slide-num">06 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 6 — HONEST UNIT ECONOMICS
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s6">
+    <div class="slide-inner">
+        <h2 class="slide-title">Unit Economics: Where Kalpanā Prints Money</h2>
+        <div class="two-col" style="margin-bottom: 18px;">
+            <div class="tile tile-warn" style="padding: 18px;">
+                <h3 style="color: var(--accent-rose); font-size: 16px;"><i class="fa-solid fa-xmark" style="margin-right: 6px;"></i>Where We DON'T Compete</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin: 10px 0;">Short-context chat (< 4K tokens). At this scale, standard KV-cache is cheap enough. RIF offers no cost advantage per-request.</p>
+                <div style="font-size: 12px; color: var(--text-muted);">
+                    → This is a <strong>marketing funnel</strong>, not a profit center.
+                </div>
+            </div>
+            <div class="tile tile-good" style="padding: 18px;">
+                <h3 style="color: var(--accent-lime); font-size: 16px;"><i class="fa-solid fa-check" style="margin-right: 6px;"></i>Where We Win Decisively</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin: 10px 0;">Long-context & Knowledge Packs (32K+ tokens). Here, standard approaches need multi-GPU clusters. RIF runs on a single commodity GPU.</p>
+                <div style="font-size: 12px; color: var(--text-muted);">
+                    → This is the <strong>profit engine</strong>.
+                </div>
+            </div>
+        </div>
+
+        <div class="tile" style="padding: 18px;">
+            <h3 style="color: var(--accent-cyan); font-size: 16px; margin-bottom: 6px;"><i class="fa-solid fa-bolt" style="margin-right: 8px;"></i>Eliminating the GPU Tax: The Real Profit Engine</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Traditional APIs re-send full conversation history every message. RIF keeps the state persistent &mdash; each follow-up only processes <strong style="color: var(--accent-lime);">new tokens</strong>. Same 100 tokens per message in both cases.</p>
+
+            <div class="two-col" style="gap: 24px;">
+                <div>
+                    <div style="font-size: 10px; font-weight: 700; color: var(--accent-rose); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">Traditional &mdash; re-processes full history</div>
+                    <div style="display: flex; flex-direction: column; gap: 3px;">
+                        <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 9px; color: var(--text-muted); width: 40px; text-align: right;">Msg 1</span><div style="height: 14px; width: 10%; background: var(--accent-rose); border-radius: 3px; opacity: 0.7;"></div><span style="font-size: 9px; color: var(--text-muted);">100 tokens</span></div>
+                        <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 9px; color: var(--text-muted); width: 40px; text-align: right;">Msg 2</span><div style="height: 14px; width: 20%; background: var(--accent-rose); border-radius: 3px; opacity: 0.75;"></div><span style="font-size: 9px; color: var(--text-muted);">200 <span style="color: var(--accent-rose);">(100 old + 100 new)</span></span></div>
+                        <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 9px; color: var(--text-muted); width: 40px; text-align: right;">Msg 5</span><div style="height: 14px; width: 50%; background: var(--accent-rose); border-radius: 3px; opacity: 0.85;"></div><span style="font-size: 9px; color: var(--text-muted);">500 <span style="color: var(--accent-rose);">(400 old + 100 new)</span></span></div>
+                        <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 9px; color: var(--text-muted); width: 40px; text-align: right;">Msg 10</span><div style="height: 14px; width: 100%; background: var(--accent-rose); border-radius: 3px;"></div><span style="font-size: 9px; color: var(--text-muted);">1,000 <span style="color: var(--accent-rose);">(900 old + 100 new)</span></span></div>
+                    </div>
+                    <div style="font-size: 12px; color: var(--accent-rose); font-weight: 700; margin-top: 8px;">Total: 5,500 tokens processed</div>
+
+                    <div style="margin-top: 14px; font-size: 10px; font-weight: 700; color: var(--accent-lime); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">Kalpana RIF &mdash; processes only new tokens</div>
+                    <div style="display: flex; flex-direction: column; gap: 3px;">
+                        <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 9px; color: var(--text-muted); width: 40px; text-align: right;">Msg 1</span><div style="height: 14px; width: 10%; background: var(--accent-lime); border-radius: 3px; opacity: 0.7;"></div><span style="font-size: 9px; color: var(--text-muted);">100 tokens</span></div>
+                        <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 9px; color: var(--text-muted); width: 40px; text-align: right;">Msg 2</span><div style="height: 14px; width: 10%; background: var(--accent-lime); border-radius: 3px; opacity: 0.75;"></div><span style="font-size: 9px; color: var(--text-muted);">100 <span style="color: var(--accent-cyan);">&larr; only new (RIF has history)</span></span></div>
+                        <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 9px; color: var(--text-muted); width: 40px; text-align: right;">Msg 5</span><div style="height: 14px; width: 10%; background: var(--accent-lime); border-radius: 3px; opacity: 0.85;"></div><span style="font-size: 9px; color: var(--text-muted);">100</span></div>
+                        <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 9px; color: var(--text-muted); width: 40px; text-align: right;">Msg 10</span><div style="height: 14px; width: 10%; background: var(--accent-lime); border-radius: 3px;"></div><span style="font-size: 9px; color: var(--text-muted);">100</span></div>
+                    </div>
+                    <div style="font-size: 12px; color: var(--accent-lime); font-weight: 700; margin-top: 8px;">Total: 1,000 tokens processed</div>
+                </div>
+
+                <div>
+                    <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Compute savings by conversation length</div>
+                    <table style="width: 100%; font-size: 12px;">
+                        <thead><tr>
+                            <th style="text-align: left; padding: 6px 8px; font-size: 10px;">Conversation</th>
+                            <th style="text-align: center; padding: 6px 4px; font-size: 10px; color: var(--accent-rose);">Traditional (tokens)</th>
+                            <th style="text-align: center; padding: 6px 4px; font-size: 10px; color: var(--accent-lime);">Kalpana (tokens)</th>
+                            <th style="text-align: center; padding: 6px 4px; font-size: 10px; color: var(--accent-cyan);">Savings</th>
+                        </tr></thead>
+                        <tbody>
+                            <tr><td style="padding: 5px 8px;">10 messages</td><td style="text-align: center; color: var(--accent-rose); font-weight: 600;">5,500</td><td style="text-align: center; color: var(--accent-lime); font-weight: 600;">1,000</td><td style="text-align: center; color: var(--accent-cyan); font-weight: 700;">5.5x</td></tr>
+                            <tr><td style="padding: 5px 8px;">30 messages</td><td style="text-align: center; color: var(--accent-rose); font-weight: 600;">46,500</td><td style="text-align: center; color: var(--accent-lime); font-weight: 600;">3,000</td><td style="text-align: center; color: var(--accent-cyan); font-weight: 700;">15.5x</td></tr>
+                            <tr style="background: rgba(163,230,53,0.06);"><td style="padding: 5px 8px;">100 messages</td><td style="text-align: center; color: var(--accent-rose); font-weight: 600;">505,000</td><td style="text-align: center; color: var(--accent-lime); font-weight: 600;">10,000</td><td style="text-align: center; color: var(--accent-cyan); font-weight: 700; font-size: 14px;">50.5x</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 14px; padding: 12px; background: rgba(163,230,53,0.06); border-radius: 8px; border: 1px solid rgba(163,230,53,0.15);">
+                        <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Compute reduction at scale</div>
+                        <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.7;">
+                            At 30-msg avg conversation:<br>
+                            Traditional processes <strong style="color: var(--accent-rose);">46,500 tokens</strong> per conversation<br>
+                            Kalpana processes <strong style="color: var(--accent-lime);">3,000 tokens</strong> per conversation<br>
+                            <strong style="color: var(--accent-cyan); font-size: 18px;">93.5% less compute</strong><br>
+                            <span style="font-size: 10px; color: var(--text-muted);">Scales linearly: 10 GPUs = 10&times; savings, 1000 GPUs = 1000&times;</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted); padding: 8px; background: rgba(56,189,248,0.04); border-radius: 6px;">
+                        <strong style="color: var(--accent-cyan);">Why?</strong> The RIF state <em>is</em> the KV-cache &mdash; it holds the compressed memory of all past tokens. The attention layer attends to it directly. No re-processing needed.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">07 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 7b — WHY WE CAN PRICE DIFFERENTLY
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s7b">
+    <div class="slide-inner">
+        <h2 class="slide-title">Why We Can Price What Others Can&rsquo;t</h2>
+        <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 20px; max-width: 800px;">
+            OpenAI charges per token because their cost <em>is</em> per token. Kalpan&amacr; can offer <strong style="color: var(--accent-lime);">flat-rate pricing</strong> because our compute cost is bounded &mdash; regardless of conversation length.
+        </p>
+
+        <!-- Comparison table -->
+        <div class="tile" style="padding: 0; overflow: hidden; margin-bottom: 16px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                <thead>
+                    <tr style="background: rgba(56, 189, 248, 0.08);">
+                        <th style="padding: 12px 14px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase;"></th>
+                        <th style="padding: 12px 10px; text-align: center; font-size: 11px; color: var(--accent-rose); text-transform: uppercase; font-weight: 700;">OpenAI / Anthropic</th>
+                        <th style="padding: 12px 10px; text-align: center; font-size: 11px; color: var(--accent-lime); text-transform: uppercase; font-weight: 700;">Kalpan&amacr; RIF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 11px 14px; font-weight: 600;">Pricing model</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose);">Per token (pay-as-you-go)</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">Flat subscription</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 11px 14px; font-weight: 600;">Cost at Msg 1</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--text-muted);">~same</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--text-muted);">~same</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 11px 14px; font-weight: 600;">Cost at Msg 30</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose); font-weight: 700;">30&times; more expensive</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">Same as Msg 1</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                        <td style="padding: 11px 14px; font-weight: 600;">Long context (128K+)</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose);">Very expensive</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-lime);">Same flat cost</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 11px 14px; font-weight: 600;">Knowledge Packs</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-rose);">Doesn&rsquo;t exist</td>
+                        <td style="padding: 11px 10px; text-align: center; color: var(--accent-lime); font-weight: 700;">Compile once, query forever</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Why this works -->
+        <div class="two-col" style="gap: 16px; margin-bottom: 16px;">
+            <div class="tile tile-warn" style="padding: 16px;">
+                <h3 style="color: var(--accent-rose); font-size: 14px; margin-bottom: 8px;"><i class="fa-solid fa-arrow-trend-up" style="margin-right: 6px;"></i>Their cost curve</h3>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">Every follow-up re-processes the entire conversation history. Cost grows O(N&sup2;) over a session.</p>
+                <div style="font-size: 11px; color: var(--text-muted);">&rarr; Must charge per token. Can&rsquo;t offer flat rate without losing money on heavy users.</div>
+            </div>
+            <div class="tile tile-good" style="padding: 16px;">
+                <h3 style="color: var(--accent-lime); font-size: 14px; margin-bottom: 8px;"><i class="fa-solid fa-minus" style="margin-right: 6px;"></i>Our cost curve</h3>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">Each follow-up processes only new tokens. RIF state holds history. Cost stays O(N) &mdash; linear in new tokens only.</p>
+                <div style="font-size: 11px; color: var(--text-muted);">&rarr; Flat subscription is profitable. Heavy users cost the same as light users.</div>
+            </div>
+        </div>
+
+        <!-- Profit engines -->
+        <div class="tile tile-accent" style="padding: 16px 20px; border: 1px solid rgba(102,242,255,0.2);">
+            <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">Three profit engines</div>
+            <div style="display: flex; gap: 16px;">
+                <div style="flex: 1; text-align: center;">
+                    <div style="font-size: 22px; margin-bottom: 4px;">&#128176;</div>
+                    <div style="font-size: 12px; font-weight: 700; color: var(--accent-lime);">Flat Subscriptions</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">$10&ndash;20/mo unlimited context. Profitable because cost is O(1).</div>
+                </div>
+                <div style="flex: 1; text-align: center;">
+                    <div style="font-size: 22px; margin-bottom: 4px;">&#128230;</div>
+                    <div style="font-size: 12px; font-weight: 700; color: var(--accent-violet);">Knowledge Pack Marketplace</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Sell pre-compiled domain packs (legal, medical, finance). 20% platform take.</div>
+                </div>
+                <div style="flex: 1; text-align: center;">
+                    <div style="font-size: 22px; margin-bottom: 4px;">&#9881;&#65039;</div>
+                    <div style="font-size: 12px; font-weight: 700; color: var(--accent-cyan);">Infrastructure Licensing</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">License RIF engine to cloud providers who want 93% less GPU cost.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">07b / 16</div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 7 — WHO BUYS & WHY
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s7">
+    <div class="slide-inner">
+        <h2 class="slide-title">Who Buys & Why</h2>
+
+        <!-- Primary Customer Definition -->
+        <div class="tile tile-accent" style="padding: 18px 24px; margin-bottom: 18px; text-align: center;">
+            <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Primary Customer</div>
+            <p style="font-size: 20px; font-weight: 700; color: var(--text-primary); line-height: 1.4;">
+                Organizations deploying open-source language models in production
+            </p>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">These companies already run inference infrastructure. They need to serve more users on less hardware.</p>
+        </div>
+
+        <div class="two-col" style="margin-bottom: 18px;">
+            <!-- LEFT: Who Signs the Contract -->
+            <div class="tile" style="padding: 18px;">
+                <h3 style="color: var(--accent-lime); font-size: 16px; margin-bottom: 12px;"><i class="fa-solid fa-file-signature" style="margin-right: 8px;"></i>Who Signs the Contract</h3>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-server" style="color: var(--accent-cyan); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;"><strong>AI Platform Providers</strong> — hosting LLM inference at massive scale</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-mobile-screen-button" style="color: var(--accent-cyan); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;"><strong>Edge & Mobile Developers</strong> — building offline, private high-context apps</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-cloud" style="color: var(--accent-cyan); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;"><strong>AI SaaS Companies</strong> — building products on top of open-source models</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-hospital" style="color: var(--accent-cyan); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;"><strong>Healthcare Vendors</strong> — deploying private patient copilots on tablets</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-shield-halved" style="color: var(--accent-cyan); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;"><strong>Government & Defence</strong> — secure, air-gapped offline edge deployments</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: What They Use It For -->
+            <div class="tile" style="padding: 18px;">
+                <h3 style="color: var(--accent-cyan); font-size: 16px; margin-bottom: 12px;"><i class="fa-solid fa-bullseye" style="margin-right: 8px;"></i>What They Use It For</h3>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-stethoscope" style="color: var(--text-muted); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;">Medical copilots over patient records</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-scale-balanced" style="color: var(--text-muted); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;">Legal assistants across 10,000+ page contracts</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;">Enterprise knowledge search (replacing RAG)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-code" style="color: var(--text-muted); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;">Coding assistants with full-repo context</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-mobile-screen" style="color: var(--text-muted); width: 18px; font-size: 13px;"></i>
+                        <span style="font-size: 14px;">Edge AI on mobile & embedded devices</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Size bar -->
+        <div class="tile" style="padding: 14px 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 13px; color: var(--text-secondary);">
+                    <strong style="color: var(--accent-lime);">Addressable market:</strong> Enterprise Gen-AI infra >$100B (2025) · Long-context segment growing 35–40% CAGR
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">08 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 8 — COMPETITIVE LANDSCAPE
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s8">
+    <div class="slide-inner">
+        <h2 class="slide-title">Competitive Landscape</h2>
+        <div class="tile" style="padding: 20px; margin-bottom: 18px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Approach</th>
+                        <th>Memory Scaling</th>
+                        <th>Users with 1M Token Context per A100</th>
+                        <th>Context Fidelity</th>
+                        <th>Key Limitation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong style="color: var(--accent-rose);">Standard KV-Cache</strong></td>
+                        <td style="color: var(--accent-rose);">O(N) — linear</td>
+                        <td style="color: var(--accent-rose); font-weight: 700;">&lt;1 <span style="font-weight: 400; font-size: 11px;">(needs 138 GB)</span></td>
+                        <td style="color: var(--accent-lime);">Exact — no loss</td>
+                        <td>Model + KV-cache exceeds single GPU VRAM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flash Attention</strong> <span style="color: var(--text-muted); font-size: 11px;">(Tri Dao)</span></td>
+                        <td style="color: var(--accent-rose);">O(N) — still linear</td>
+                        <td style="color: var(--accent-rose); font-weight: 700;">&lt;1 <span style="font-weight: 400; font-size: 11px;">(same memory)</span></td>
+                        <td style="color: var(--accent-lime);">Exact — no loss</td>
+                        <td>Faster compute, identical memory footprint</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ring Attention</strong></td>
+                        <td>O(N/k) per GPU</td>
+                        <td style="color: var(--accent-rose);">~1 <span style="font-size: 11px;">(across 4–8 GPUs)</span></td>
+                        <td style="color: var(--accent-lime);">Exact — no loss</td>
+                        <td>Multi-GPU mandatory, inter-GPU latency</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sparse Attention</strong></td>
+                        <td>O(N√N)</td>
+                        <td>~2–5 <span style="font-size: 11px;">(reduced cache)</span></td>
+                        <td style="color: var(--accent-rose);">Lossy — drops tokens</td>
+                        <td>Accuracy degrades at long context</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RAG</strong> <span style="color: var(--text-muted); font-size: 11px;">(Retrieval)</span></td>
+                        <td>External DB</td>
+                        <td style="color: var(--accent-rose);">N/A <span style="font-size: 11px;">— ~50 MB external DB, but retrieves &lt;1% per query</span></td>
+                        <td style="color: var(--accent-rose);">Lossy — model sees ~0.5% at a time</td>
+                        <td>No true full-context comprehension</td>
+                    </tr>
+                    <tr style="background: rgba(102, 242, 255, 0.06);">
+                        <td><strong style="color: var(--accent-cyan);">Kalpanā RIF</strong></td>
+                        <td style="color: var(--accent-lime); font-weight: 700;">O(1) — constant</td>
+                        <td style="color: var(--accent-lime); font-weight: 700; font-size: 16px;">300+ <span style="font-weight: 400; font-size: 11px;">(256 MB each)</span></td>
+                        <td style="color: var(--accent-lime);">Benchmarked (live API)</td>
+                        <td style="color: var(--accent-cyan);">Early stage — expanding validation scope</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tile" style="padding: 14px 20px;">
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.55;">
+                <strong style="color: var(--accent-cyan);">Key differentiator:</strong> Every competitor optimizes <em>within</em> the O(N) linear scaling paradigm, locking them exclusively into massive enterprise GPU data centers. Kalpanā <em>eliminates</em> the KV-Cache entirely through a new mathematical physics-derived foundation. Because context memory drops from 384 GB to a fixed <strong>6.3 MB</strong>, Kalpanā is the <strong>only engine capable of running multi-million token context offline on standard edge devices</strong> (iPhones, Android, and laptops).
+            </p>
+        </div>
+    </div>
+    <div class="slide-num">09 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 9 — IP & DEFENSIBILITY
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s9">
+    <div class="slide-inner">
+        <h2 class="slide-title">IP & Defensibility</h2>
+        <div class="three-col">
+            <div class="tile tile-accent" style="padding: 20px; text-align: center;">
+                <i class="fa-solid fa-shield-halved" style="font-size: 36px; color: var(--accent-cyan); margin-bottom: 12px;"></i>
+                <h3 style="color: var(--accent-cyan);">PCT Patent Filed</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">International utility patent covering O(1) bounded-memory attention weight compilation. Multi-jurisdiction prosecution planned.</p>
+            </div>
+            <div class="tile tile-good" style="padding: 20px; text-align: center;">
+                <i class="fa-solid fa-lock" style="font-size: 36px; color: var(--accent-lime); margin-bottom: 12px;"></i>
+                <h3 style="color: var(--accent-lime);">Compiled Weights</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">RIF-embedded model weights are proprietary binaries. Cannot be reverse-engineered to extract the compilation algorithm.</p>
+            </div>
+            <div class="tile" style="padding: 20px; text-align: center;">
+                <i class="fa-solid fa-atom" style="font-size: 36px; color: var(--accent-violet); margin-bottom: 12px;"></i>
+                <h3 style="color: var(--accent-violet);">Physics-Derived</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">Approach comes from quantum interference theory, not ML literature. Hard to replicate from within the standard ML research paradigm.</p>
+            </div>
+        </div>
+        <div class="tile" style="margin-top: 18px; padding: 16px 20px;">
+            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.5;">
+                <strong style="color: var(--accent-cyan);">Moat depth:</strong> Unlike software patents that describe algorithms, our patent covers a <em>physical principle</em> applied to tensor operations. Competitors would need to independently discover the same physics-to-ML mapping — which took our founder 3+ years of research.
+            </p>
+        </div>
+    </div>
+    <div class="slide-num">10 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 10 — FOUNDING TEAM
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s10">
+    <div class="slide-inner" style="text-align: center;">
+        <h2 class="slide-title">Founding Team</h2>
+        <div class="tile" style="max-width: 600px; margin: 0 auto; padding: 30px;">
+            <img src="madusha_profile.png" alt="Madusha" class="team-photo" style="margin-bottom: 16px;">
+            <h3 style="font-size: 28px; color: var(--text-primary);">Madusha</h3>
+            <div style="font-size: 14px; color: var(--accent-cyan); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin: 6px 0 16px;">Founder & Architect</div>
+            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">PhD Candidate, Department of Physics, University of Colombo. 15 years of deep industry experience in core systems architecture and infrastructure engineering.</p>
+            <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                <span class="badge badge-cyan">Physics R&D</span>
+                <span class="badge badge-lime">Systems Architecture</span>
+                <span class="badge" style="background: rgba(192,132,252,0.12); color: var(--accent-violet);">CUDA / C++</span>
+            </div>
+        </div>
+        <div class="tile" style="max-width: 600px; margin: 20px auto 0; padding: 16px; border-color: var(--border-good);">
+            <p style="font-size: 13px; color: var(--text-secondary);">
+                <strong style="color: var(--accent-lime);">First hire (post-funding):</strong> CTO / Co-founder with ML Ops & production inference experience. Budget allocated.
+            </p>
+        </div>
+    </div>
+    <div class="slide-num">11 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 11 — GO-TO-MARKET
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s11">
+    <div class="slide-inner">
+        <h2 class="slide-title">Go-to-Market Strategy</h2>
+        <div class="timeline" style="margin-bottom: 24px;">
+            <div class="tl-item">
+                <div style="font-size: 11px; color: var(--accent-cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Phase 1</div>
+                <div class="tl-dot"></div>
+                <h3 style="font-size: 14px; color: var(--accent-cyan);">Months 1–6</h3>
+                <p style="font-size: 12px; color: var(--text-secondary);">Build Team & Validate</p>
+            </div>
+            <div class="tl-item">
+                <div style="font-size: 11px; color: var(--accent-lime); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Phase 2</div>
+                <div class="tl-dot"></div>
+                <h3 style="font-size: 14px; color: var(--accent-lime);">Months 6–12</h3>
+                <p style="font-size: 12px; color: var(--text-secondary);">Pilots & First Revenue</p>
+            </div>
+            <div class="tl-item">
+                <div style="font-size: 11px; color: var(--accent-violet); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Phase 3</div>
+                <div class="tl-dot"></div>
+                <h3 style="font-size: 14px; color: var(--accent-violet);">Months 12–18</h3>
+                <p style="font-size: 12px; color: var(--text-secondary);">Scale & Series A</p>
+            </div>
+        </div>
+
+        <div class="three-col">
+            <div class="tile" style="padding: 16px; border-left: 3px solid var(--accent-cyan);">
+                <h3 style="font-size: 13px; color: var(--accent-cyan); margin-bottom: 8px;"><i class="fa-solid fa-flask" style="margin-right: 6px;"></i>Build & Validate</h3>
+                <ul style="font-size: 12px; line-height: 1.5;">
+                    <li><strong>Hire core team:</strong> CTO, ML Engineer, Infra Engineer, R&D Engineer</li>
+                    <li>Independent 3rd-party benchmarking (MMLU, HellaSwag, HumanEval)</li>
+                    <li>Publish peer-reviewed paper (not preprint)</li>
+                    <li>Production-harden API & Knowledge Pack pipeline</li>
+                    <li>Add Mistral 7B & Qwen 2.5 7B RIF support</li>
+                    <li><strong style="color: var(--accent-cyan);">Goal: Product market-ready with validated claims</strong></li>
+                </ul>
+            </div>
+            <div class="tile" style="padding: 16px; border-left: 3px solid var(--accent-lime);">
+                <h3 style="font-size: 13px; color: var(--accent-lime); margin-bottom: 8px;"><i class="fa-solid fa-rocket" style="margin-right: 6px;"></i>Pilots & First Revenue</h3>
+                <ul style="font-size: 12px; line-height: 1.5;">
+                    <li>Land 3 enterprise pilots (legal / medical / code)</li>
+                    <li>First $50K+ license deal</li>
+                    <li>SDK for HuggingFace / vLLM integration</li>
+                    <li>Serverless GPU infra (RunPod/Modal) for API</li>
+                    <li><strong style="color: var(--accent-lime);">Target: $50K MRR</strong></li>
+                </ul>
+            </div>
+            <div class="tile" style="padding: 16px; border-left: 3px solid var(--accent-violet);">
+                <h3 style="font-size: 13px; color: var(--accent-violet); margin-bottom: 8px;"><i class="fa-solid fa-chart-line" style="margin-right: 6px;"></i>Scale & Series A</h3>
+                <ul style="font-size: 12px; line-height: 1.5;">
+                    <li>10+ enterprise customers</li>
+                    <li>Knowledge Pack marketplace MVP</li>
+                    <li>Edge inference SDK (mobile / browser)</li>
+                    <li>Series A preparation at $200K+ MRR</li>
+                    <li><strong style="color: var(--accent-violet);">Target: $200K MRR</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">12 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 12 — FINANCIAL PROJECTIONS
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s12">
+    <div class="slide-inner">
+        <h2 class="slide-title">Financial Projections</h2>
+        <div class="tile" style="padding: 20px; margin-bottom: 18px;">
+            <table style="font-size: 14px;">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th style="text-align: center;">Month 6 <span style="font-size: 9px; color: var(--text-muted); text-transform: none;">(build)</span></th>
+                        <th style="text-align: center;">Month 12</th>
+                        <th style="text-align: center;">Month 18</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>MRR</strong></td>
+                        <td style="text-align: center; color: var(--text-muted);">$0</td>
+                        <td style="text-align: center; color: var(--accent-lime);">$50K</td>
+                        <td style="text-align: center; color: var(--accent-lime); font-weight: 700;">$200K</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ARR</strong></td>
+                        <td style="text-align: center; color: var(--text-muted);">—</td>
+                        <td style="text-align: center;">$600K</td>
+                        <td style="text-align: center; font-weight: 700;">$2.4M</td>
+                    </tr>
+                    <tr>
+                        <td>Paying Customers</td>
+                        <td style="text-align: center; color: var(--text-muted);">0</td>
+                        <td style="text-align: center;">5</td>
+                        <td style="text-align: center;">15+</td>
+                    </tr>
+                    <tr>
+                        <td>GPU Spend</td>
+                        <td style="text-align: center;">$2K/mo</td>
+                        <td style="text-align: center;">$8K/mo</td>
+                        <td style="text-align: center;">$20K/mo</td>
+                    </tr>
+                    <tr>
+                        <td>Blended Gross Margin</td>
+                        <td style="text-align: center; color: var(--text-muted);">—</td>
+                        <td style="text-align: center;">60%</td>
+                        <td style="text-align: center; color: var(--accent-lime);">75%</td>
+                    </tr>
+                    <tr>
+                        <td>Monthly Burn</td>
+                        <td style="text-align: center;">$60K</td>
+                        <td style="text-align: center;">$100K</td>
+                        <td style="text-align: center;">$120K</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="two-col">
+            <div class="tile" style="padding: 16px;">
+                <h3 style="color: var(--accent-lime); font-size: 15px;">Margin Evolution</h3>
+                <p style="font-size: 12px; color: var(--text-secondary); margin: 8px 0 12px;">Months 1–6: pure build (no revenue). As licensing kicks in (95% margin), blended margin climbs to 75%.</p>
+                <div class="bar-row">
+                    <div class="bar-label">Month 6</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 3%; background: rgba(255,255,255,0.15); color: var(--text-muted); font-size: 10px; padding: 0 6px;">Build</div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Month 12</div>
+                    <div class="bar-track"><div class="bar-fill bar-lime" style="width: 60%;">60%</div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Month 18</div>
+                    <div class="bar-track"><div class="bar-fill bar-lime" style="width: 75%;">75%</div></div>
+                </div>
+            </div>
+            <div class="tile" style="padding: 16px;">
+                <h3 style="color: var(--accent-cyan); font-size: 15px;">Runway</h3>
+                <p style="font-size: 12px; color: var(--text-secondary); margin: 8px 0;">At $2.5M seed with projected burn:</p>
+                <div style="text-align: center; margin: 14px 0;">
+                    <div style="font-size: 38px; font-weight: 900; color: var(--accent-cyan);">~24</div>
+                    <div style="font-size: 13px; color: var(--text-muted);">months of runway</div>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); text-align: center;">Series A preparation begins at Month 18 with $200K+ MRR traction.</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">13 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 13 — THE ASK
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s13">
+    <div class="slide-inner">
+        <h2 class="slide-title">The Ask: $2.5M Seed</h2>
+        <div class="two-col">
+            <div class="tile" style="padding: 22px;">
+                <h3 style="color: var(--accent-cyan); font-size: 20px; margin-bottom: 14px;">Deal Terms</h3>
+                <div style="font-size: 16px; line-height: 2;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 4px 0;">
+                        <span>Financing</span>
+                        <span style="color: var(--accent-cyan); font-weight: 700;">$2,500,000</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 4px 0;">
+                        <span>Equity Offered</span>
+                        <span style="color: var(--accent-lime); font-weight: 700;">12.5%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 4px 0;">
+                        <span>Pre-Money</span>
+                        <span style="font-weight: 700;">$17.5M</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                        <span>Post-Money</span>
+                        <span style="color: var(--accent-lime); font-weight: 700;">$20.0M</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tile" style="padding: 22px;">
+                <h3 style="color: var(--accent-lime); font-size: 20px; margin-bottom: 14px;">Budget Allocation</h3>
+                <div class="bar-row">
+                    <div class="bar-label">R&D + Team</div>
+                    <div class="bar-track"><div class="bar-fill bar-cyan" style="width: 36%;">$900K (36%)</div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">GPU Infra</div>
+                    <div class="bar-track"><div class="bar-fill bar-lime" style="width: 16%;">$400K (16%)</div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Patents</div>
+                    <div class="bar-track"><div class="bar-fill bar-violet" style="width: 12%;">$300K (12%)</div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Sales</div>
+                    <div class="bar-track"><div class="bar-fill bar-cyan" style="width: 12%;">$300K (12%)</div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Operations</div>
+                    <div class="bar-track"><div class="bar-fill bar-lime" style="width: 8%;">$200K (8%)</div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Buffer</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 16%; background: rgba(255,255,255,0.15); color: var(--text-secondary);">$400K (16%)</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">14 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 14 — WHY NOW
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s14">
+    <div class="slide-inner">
+        <h2 class="slide-title">Why Now?</h2>
+        <div class="two-col">
+            <div class="tile tile-warn" style="padding: 20px;">
+                <h3 style="color: var(--accent-rose);"><i class="fa-solid fa-fire" style="margin-right: 8px;"></i>AI Inference Costs Are Exploding</h3>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-top: 10px;">Every major lab is shipping 1M+ context windows. GPU demand is outpacing supply. VRAM is the new bottleneck.</p>
+                <h3 style="color: var(--accent-cyan); margin-top: 20px;"><i class="fa-solid fa-microchip" style="margin-right: 8px;"></i>GPU Shortages</h3>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-top: 10px;">Enterprises are bottlenecked by VRAM limits. A technology that reduces VRAM needs by ~480× is immediately valuable — one A100 can serve 300+ concurrent sessions.</p>
+            </div>
+            <div class="tile tile-good" style="padding: 20px;">
+                <h3 style="color: var(--accent-lime);"><i class="fa-solid fa-globe" style="margin-right: 8px;"></i>The Long-Context Race</h3>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-top: 10px;">Gemini (2M tokens), Claude (200K), GPT-4o (128K) — every provider is pushing context limits. The O(N) cost wall is hitting <em>now</em>.</p>
+                <h3 style="color: var(--accent-violet); margin-top: 20px;"><i class="fa-solid fa-mobile-screen" style="margin-right: 8px;"></i>Edge AI Demand</h3>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-top: 10px;">Massive untapped market for AI running locally on phones, laptops — without cloud dependence. RIF makes this possible.</p>
+            </div>
+        </div>
+        <div class="tile" style="margin-top: 18px; padding: 16px 20px; text-align: center;">
+            <p style="font-size: 15px; color: var(--text-secondary);">
+                <strong style="color: var(--accent-cyan);">Window of opportunity:</strong> Right now, the industry is searching for memory solutions. In 12–18 months, a standard will emerge. We need to be that standard.
+            </p>
+        </div>
+    </div>
+    <div class="slide-num">15 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 15 — CLOSE
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s15">
+    <div class="slide-inner" style="text-align: center;">
+        <h1 style="margin-bottom: 20px;">
+            <span class="gradient-text">JOIN US</span>
+        </h1>
+        <p class="subtitle" style="max-width: 700px; margin: 0 auto 40px;">Building the Bounded-Memory Future of AI</p>
+
+        <div class="tile" style="max-width: 750px; margin: 0 auto 40px; padding: 28px;">
+            <p style="font-size: 18px; color: var(--text-primary); line-height: 1.6; font-style: italic;">
+                "If validated at production scale, Kalpanā is positioned to become a fundamental infrastructure layer — the memory substrate that every AI system runs on."
+            </p>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 30px;">
+            <div class="tile" style="padding: 16px 24px; text-align: center;">
+                <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Live Demo</div>
+                <div style="font-size: 14px; color: var(--accent-cyan); margin-top: 4px; font-family: var(--font-mono);">huggingface.co/MaduRox</div>
+            </div>
+            <div class="tile" style="padding: 16px 24px; text-align: center;">
+                <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Investor Relations</div>
+                <div style="font-size: 14px; color: var(--accent-lime); margin-top: 4px;">invest@vijñānaai.com</div>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 16px;">
+            <span class="badge badge-cyan" style="font-size: 12px; padding: 5px 14px;">PCT Patent Filed</span>
+            <span class="badge badge-lime" style="font-size: 12px; padding: 5px 14px;">Live Working Product</span>
+            <span class="badge" style="font-size: 12px; padding: 5px 14px; background: rgba(192,132,252,0.12); color: var(--accent-violet);">$2.5M Seed</span>
+        </div>
+    </div>
+    <div class="slide-num">16 / 16</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     NAVIGATION SCRIPT
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+    const TOTAL = 15;
+    const nav = document.getElementById('navDots');
+
+    // Create dots
+    for (let i = 1; i <= TOTAL; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'nav-dot';
+        dot.dataset.slide = i;
+        dot.title = `Slide ${i}`;
+        dot.addEventListener('click', () => {
+            document.getElementById(`s${i}`).scrollIntoView({ behavior: 'smooth' });
+        });
+        nav.appendChild(dot);
+    }
+
+    // Track active slide
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const idx = entry.target.id.replace('s', '');
+                document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
+                const activeDot = document.querySelector(`.nav-dot[data-slide="${idx}"]`);
+                if (activeDot) activeDot.classList.add('active');
+            }
+        });
+    }, { threshold: 0.5 });
+
+    for (let i = 1; i <= TOTAL; i++) {
+        observer.observe(document.getElementById(`s${i}`));
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        const active = document.querySelector('.nav-dot.active');
+        const current = active ? parseInt(active.dataset.slide) : 1;
+
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            const next = Math.min(current + 1, TOTAL);
+            document.getElementById(`s${next}`).scrollIntoView({ behavior: 'smooth' });
+        }
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            const prev = Math.max(current - 1, 1);
+            document.getElementById(`s${prev}`).scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+})();
+</script>
+
+</body>
+</html>
