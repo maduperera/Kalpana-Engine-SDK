@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalpanā — AI Memory That Doesn't Forget</title>
+<meta name="description" content="Kalpanā gives AI a memory that scales to millions of tokens in 8MB. Upload documents, chat, and get precise answers — no hallucination, no limits.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0a0c1a;
+  --paper:#ffffff;
+  --indigo:#4f46e5;
+  --purple:#7c3aed;
+  --violet:#8b5cf6;
+  --cyan:#06b6d4;
+  --emerald:#10b981;
+  --rose:#f43f5e;
+  --amber:#f59e0b;
+  --gray-50:#f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-400:#94a3b8;
+  --gray-600:#475569;
+  --gray-700:#334155;
+  --gray-900:#0f172a;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--paper);overflow-x:hidden}
+
+/* ─── NAV ─────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5%;background:rgba(10,12,26,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;letter-spacing:-.5px}
+.nav-logo .wave{font-size:24px}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{color:rgba(255,255,255,.65);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{background:linear-gradient(135deg,var(--indigo),var(--purple));color:#fff;padding:9px 20px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:opacity .2s;white-space:nowrap}
+.nav-cta:hover{opacity:.88}
+
+/* ─── HERO ────────────────────────────────────────────────── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 5% 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 10%,rgba(79,70,229,.18) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(124,58,237,.12) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 20% 60%,rgba(6,182,212,.08) 0%,transparent 60%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(79,70,229,.12);border:1px solid rgba(79,70,229,.3);border-radius:100px;padding:6px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.8);margin-bottom:28px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--emerald);box-shadow:0 0 6px var(--emerald)}
+h1{font-size:clamp(42px,6vw,80px);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:22px;background:linear-gradient(135deg,#fff 30%,rgba(167,139,250,.9));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:rgba(255,255,255,.55);max-width:600px;margin:0 auto 44px;line-height:1.7;font-weight:400}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn-primary{background:linear-gradient(135deg,var(--indigo),var(--purple));color:#fff;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 32px rgba(79,70,229,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(79,70,229,.45)}
+.btn-secondary{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;text-decoration:none;transition:background .2s}
+.btn-secondary:hover{background:rgba(255,255,255,.1)}
+.hero-stats{display:flex;gap:48px;margin-top:60px;flex-wrap:wrap;justify-content:center}
+.stat-item{text-align:center}
+.stat-num{font-size:36px;font-weight:800;background:linear-gradient(135deg,#fff,rgba(167,139,250,.9));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-1px}
+.stat-label{font-size:13px;color:rgba(255,255,255,.45);margin-top:3px;font-weight:500}
+
+/* ─── LIVE DEMO EMBED ─────────────────────────────────────── */
+.section{padding:90px 5%}
+.section-label{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);margin-bottom:12px}
+.section-title{font-size:clamp(28px,4vw,46px);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:16px}
+.section-sub{font-size:17px;color:rgba(255,255,255,.5);max-width:560px;line-height:1.7}
+.demo-wrap{max-width:1100px;margin:0 auto}
+.demo-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px}
+.demo-tabs{display:flex;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:4px}
+.demo-tab{padding:8px 18px;border-radius:7px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;color:rgba(255,255,255,.5);border:none;background:transparent}
+.demo-tab.active{background:rgba(79,70,229,.25);color:#fff;border:1px solid rgba(79,70,229,.4)}
+.demo-frame{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.5)}
+.demo-browser-bar{background:rgba(255,255,255,.04);padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.browser-dots{display:flex;gap:6px}
+.browser-dot{width:10px;height:10px;border-radius:50%}
+.browser-url{flex:1;background:rgba(255,255,255,.05);border-radius:6px;padding:5px 12px;font-size:12px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.4)}
+.demo-iframe{width:100%;height:620px;border:none;display:block}
+
+/* ─── HOW IT WORKS ────────────────────────────────────────── */
+.how-section{background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1100px;margin:0 auto}
+.how-steps{display:flex;flex-direction:column;gap:28px}
+.step{display:flex;gap:18px;align-items:flex-start}
+.step-num{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--indigo),var(--purple));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.step-content h3{font-size:16px;font-weight:600;margin-bottom:5px}
+.step-content p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.6}
+.how-visual{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:32px;position:relative;overflow:hidden}
+.vis-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px}
+.memory-bar{background:rgba(255,255,255,.05);border-radius:8px;overflow:hidden;height:10px;margin-bottom:8px}
+.memory-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--indigo),var(--purple))}
+.mem-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:12px}
+.mem-name{color:rgba(255,255,255,.5);font-weight:500}
+.mem-val{font-family:'JetBrains Mono',monospace;color:var(--emerald);font-size:11px}
+.mem-val.red{color:var(--rose)}
+.mem-val.yellow{color:var(--amber)}
+.vis-divider{height:1px;background:rgba(255,255,255,.06);margin:16px 0}
+.vis-highlight{background:rgba(79,70,229,.08);border:1px solid rgba(79,70,229,.2);border-radius:8px;padding:12px 14px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.5}
+.vis-highlight strong{color:var(--violet)}
+
+/* ─── FEATURES GRID ───────────────────────────────────────── */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:48px auto 0}
+.feature-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:26px;transition:border-color .2s,background .2s}
+.feature-card:hover{border-color:rgba(79,70,229,.3);background:rgba(79,70,229,.05)}
+.feature-icon{font-size:28px;margin-bottom:14px}
+.feature-card h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.feature-card p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.6}
+
+/* ─── API SECTION ─────────────────────────────────────────── */
+.api-section{background:linear-gradient(135deg,rgba(79,70,229,.06),rgba(124,58,237,.06));border-top:1px solid rgba(79,70,229,.12);border-bottom:1px solid rgba(79,70,229,.12)}
+.api-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;max-width:1100px;margin:0 auto}
+.code-block{background:#0d1117;border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}
+.code-header{padding:10px 16px;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.4)}
+.code-lang{background:rgba(79,70,229,.2);color:var(--violet);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace}
+pre{padding:20px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;overflow-x:auto}
+.kw{color:#ff79c6}.fn{color:#50fa7b}.str{color:#f1fa8c}.cm{color:#6272a4}.var{color:#bd93f9}.num{color:#ffb86c}
+.endpoint-list{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+.endpoint{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.method{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;flex-shrink:0;margin-top:1px}
+.method.post{background:rgba(16,185,129,.15);color:var(--emerald)}
+.method.get{background:rgba(6,182,212,.15);color:var(--cyan)}
+.endpoint-info h4{font-size:14px;font-weight:600;font-family:'JetBrains Mono',monospace;margin-bottom:3px}
+.endpoint-info p{font-size:13px;color:rgba(255,255,255,.45)}
+.api-link-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(79,70,229,.12);border:1px solid rgba(79,70,229,.25);color:var(--violet);padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;margin-top:20px;transition:background .2s}
+.api-link-btn:hover{background:rgba(79,70,229,.22)}
+
+/* ─── USE CASES ───────────────────────────────────────────── */
+.use-cases{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:1100px;margin:48px auto 0}
+.use-case{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:28px;display:flex;gap:18px}
+.use-icon{font-size:32px;flex-shrink:0}
+.use-case h3{font-size:16px;font-weight:600;margin-bottom:6px}
+.use-case p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.6}
+
+/* ─── POWERED BY ──────────────────────────────────────────── */
+.powered-row{display:flex;align-items:center;gap:32px;flex-wrap:wrap;justify-content:center;margin-top:48px}
+.powered-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 20px;font-size:14px;font-weight:500;color:rgba(255,255,255,.65)}
+.powered-icon{font-size:20px}
+
+/* ─── PAPER / RESEARCH ────────────────────────────────────── */
+.paper-card{max-width:800px;margin:48px auto 0;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:36px;display:flex;gap:28px;align-items:flex-start}
+.paper-icon{font-size:48px;flex-shrink:0;line-height:1}
+.paper-card h3{font-size:20px;font-weight:700;margin-bottom:8px}
+.paper-card p{font-size:15px;color:rgba(255,255,255,.5);line-height:1.65;margin-bottom:16px}
+.paper-meta{display:flex;gap:20px;flex-wrap:wrap}
+.paper-tag{background:rgba(79,70,229,.1);border:1px solid rgba(79,70,229,.2);color:var(--violet);padding:4px 12px;border-radius:6px;font-size:12px;font-weight:500}
+
+/* ─── CTA BANNER ──────────────────────────────────────────── */
+.cta-banner{text-align:center;padding:100px 5%;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(79,70,229,.15) 0%,transparent 70%)}
+.cta-banner h2{font-size:clamp(32px,5vw,58px);font-weight:900;letter-spacing:-1.5px;margin-bottom:18px}
+.cta-banner p{font-size:18px;color:rgba(255,255,255,.5);margin-bottom:40px}
+
+/* ─── FOOTER ──────────────────────────────────────────────── */
+footer{border-top:1px solid rgba(255,255,255,.06);padding:40px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:gap;gap:20px}
+.footer-left{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700}
+.footer-right{font-size:13px;color:rgba(255,255,255,.35)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:rgba(255,255,255,.8)}
+
+/* ─── ANIMATIONS ──────────────────────────────────────────── */
+.fade-up{opacity:0;transform:translateY(24px);animation:fadeUp .7s ease forwards}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}
+
+/* ─── RESPONSIVE ──────────────────────────────────────────── */
+@media(max-width:900px){
+  .how-grid,.api-grid,.use-cases{grid-template-columns:1fr}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .demo-iframe{height:480px}
+  nav .nav-links{display:none}
+}
+@media(max-width:600px){
+  .features-grid{grid-template-columns:1fr}
+  .paper-card{flex-direction:column}
+  footer{flex-direction:column;text-align:center}
+  .hero-stats{gap:28px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════════════ -->
+<nav>
+  <div class="nav-logo">
+    <img src="VijnanaiLogo.png" alt="VIJÑĀNAAI" style="height:30px;width:auto;object-fit:contain;border-radius:50%">
+    <span style="color:rgba(255,255,255,.25);font-size:14px;font-weight:300;margin:0 6px">|</span>
+    <img src="KalapanaLogo.png" alt="Kalpanā" style="height:28px;width:auto;object-fit:contain">
+    <span style="font-size:9px;font-weight:600;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);color:#f59e0b;padding:2px 7px;border-radius:100px;letter-spacing:.06em;margin-left:6px">PATENT PENDING</span>
+  </div>
+  <div class="nav-links">
+    <a href="#offline-app">Offline App</a>
+    <a href="#demo">Try It</a>
+    <a href="#how">How It Works</a>
+    <a href="#packs">Knowledge Packs</a>
+    <a href="#api">API</a>
+    <a href="#research">Research</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="https://tinyurl.com/kalpanaai" target="_blank" class="nav-cta" style="background:linear-gradient(135deg,var(--emerald),var(--cyan));color:#000;font-weight:700">📱 Offline 3M App →</a>
+    <a href="https://huggingface.co/spaces/MaduRox/Kalpana-Chat" target="_blank" class="nav-cta">Open Chat →</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-badge fade-up">
+    <span class="dot"></span>
+    <img src="VijnanaiLogo.png" alt="VIJÑĀNAAI" style="height:18px;width:18px;border-radius:50%;object-fit:cover;vertical-align:middle;opacity:.9">
+    &nbsp;<strong>VIJÑĀNAAI</strong>&nbsp;· Live 100% Offline App & Hugging Face · A100 GPU
+  </div>
+  <h1 class="fade-up delay-1">AI Memory<br>That Scales to<br>Millions of Tokens</h1>
+  <p class="hero-sub fade-up delay-2">Kalpanā gives your AI assistant a fixed 8MB memory state that can hold an entire library of documents — with no performance loss, no hallucination, no size limit.</p>
+  <div class="hero-btns fade-up delay-3">
+    <a href="https://tinyurl.com/kalpanaai" target="_blank" class="btn-primary" style="background:linear-gradient(135deg,var(--emerald),var(--cyan));color:#0b1329;font-weight:800;box-shadow:0 8px 32px rgba(16,185,129,.4)">🚀 Try Offline App (3M Tokens)</a>
+    <a href="https://huggingface.co/spaces/MaduRox/Kalpana-Chat" target="_blank" class="btn-primary">🌊 Open Cloud Chat</a>
+    <a href="#api" class="btn-secondary">Explore the API</a>
+  </div>
+  <div class="hero-stats fade-up delay-4">
+    <div class="stat-item">
+      <div class="stat-num">3.00M</div>
+      <div class="stat-label">Tokens in memory</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">6.3 MB</div>
+      <div class="stat-label">Fixed RIF memory size</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Offline & Privacy</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">O(1)</div>
+      <div class="stat-label">Memory growth</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     100% OFFLINE 3M TOKENS APP SHOWCASE
+═══════════════════════════════════════════════════ -->
+<section class="section" id="offline-app" style="background:linear-gradient(180deg,rgba(16,185,129,.06) 0%,rgba(10,12,26,1) 100%);border-top:1px solid rgba(16,185,129,.2);border-bottom:1px solid rgba(16,185,129,.1)">
+  <div style="max-width:1100px;margin:0 auto;text-align:center">
+    <div class="section-label" style="color:var(--emerald)">Featured 100% Offline Engine</div>
+    <h2 class="section-title">Try 3M Tokens Offline on Any Mobile Device or Desktop</h2>
+    <p class="section-sub" style="margin:0 auto 36px">
+      You can now experience <strong>3 Million Tokens Context Memory</strong> fully offline on your smartphone, tablet, or PC! Powered by <strong>Qwen 1.5 0.5B (INT4)</strong> with <strong>RIF 6.3MB Memory</strong>. No internet required after download, 100% private.
+    </p>
+
+    <!-- Short URL Link Badge -->
+    <div style="display:inline-flex;align-items:center;gap:12px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.35);padding:14px 28px;border-radius:14px;margin-bottom:40px;flex-wrap:wrap;justify-content:center">
+      <span style="font-size:20px">🚀</span>
+      <span style="font-size:16px;color:rgba(255,255,255,.9);font-weight:600">Easy Download & Share Short Link:</span>
+      <a href="https://tinyurl.com/kalpanaai" target="_blank" style="font-size:18px;font-weight:800;color:var(--emerald);text-decoration:underline">https://tinyurl.com/kalpanaai</a>
+    </div>
+
+    <!-- Benchmark Graphic & QR Code Grid -->
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:28px;align-items:center;text-align:left">
+      <!-- Benchmark Image Card -->
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.5)">
+        <div style="font-size:14px;font-weight:700;color:var(--cyan);margin-bottom:12px;display:flex;align-items:center;gap:8px">
+          <span>📊</span> Kalpanā AI vs LLaMA RAM Usage Comparison
+        </div>
+        <img src="KalpanaAI_Comparison.png" alt="Kalpana AI vs LLaMA Memory Comparison" style="width:100%;border-radius:10px;display:block;border:1px solid rgba(255,255,255,.1)" />
+        <div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:12px;line-height:1.5">
+          Standard LLaMA models require <strong>24+ GB RAM</strong> for 3M tokens context. Kalpanā AI compresses 3M tokens into a fixed <strong>6.3 MB RIF Memory</strong> — achieving 99.6% RAM savings on your mobile phone or laptop.
+        </div>
+      </div>
+
+      <!-- QR Code & App Highlights -->
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(16,185,129,.25);border-radius:16px;padding:24px;text-align:center">
+          <div style="font-weight:700;font-size:16px;color:#fff;margin-bottom:14px">📱 Scan to Download on Mobile</div>
+          <img src="KalpanaAI_QR.png" alt="Kalpana AI Mobile App QR Code" style="width:140px;height:140px;border-radius:12px;border:2px solid var(--emerald);margin:0 auto 14px;display:block;box-shadow:0 0 20px rgba(16,185,129,.3)" />
+          <div style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.4">
+            Point your smartphone camera at the QR code to open <strong>tinyurl.com/kalpanaai</strong> directly.
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px">
+          <div style="font-size:14px;font-weight:700;color:var(--emerald);margin-bottom:8px">⚡ Key Offline Features</div>
+          <ul style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.8;padding-left:18px;margin:0">
+            <li><strong>Qwen 1.5 0.5B (INT4)</strong> running local WebGPU shaders</li>
+            <li><strong>3,000,000 Token Context</strong> in 6.3 MB RIF RAM</li>
+            <li>Works on <strong>iOS, Android, Windows, macOS, Linux</strong></li>
+            <li>100% Offline Privacy Guarantee — Zero cloud dependency</li>
+          </ul>
+          <a href="https://tinyurl.com/kalpanaai" target="_blank" class="btn-primary" style="width:100%;text-align:center;margin-top:16px;display:block;background:linear-gradient(135deg,var(--emerald),var(--cyan));color:#000;font-weight:800">Open App at tinyurl.com/kalpanaai →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     LIVE DEMO
+═══════════════════════════════════════════════════ -->
+<section class="section" id="demo">
+  <div class="demo-wrap">
+    <div class="demo-header">
+      <div>
+        <div class="section-label">Live Demo</div>
+        <div class="section-title" style="font-size:clamp(24px,3vw,36px);margin-bottom:6px">Try It Right Now</div>
+        <p style="font-size:15px;color:rgba(255,255,255,.45)">Upload a PDF or TXT, ask anything — powered by Kalpanā memory + Llama 3</p>
+      </div>
+      <div class="demo-tabs">
+        <button class="demo-tab active" onclick="switchDemo('chat',this)">🌊 Chat</button>
+        <button class="demo-tab" onclick="switchDemo('api',this)">🚀 API Docs</button>
+      </div>
+    </div>
+    <div class="demo-frame" style="position:relative">
+      <div class="demo-browser-bar">
+        <div class="browser-dots">
+          <div class="browser-dot" style="background:#ff5f57"></div>
+          <div class="browser-dot" style="background:#febc2e"></div>
+          <div class="browser-dot" style="background:#28c840"></div>
+        </div>
+        <div class="browser-url" id="url-bar">huggingface.co/spaces/MaduRox/Kalpana-Chat</div>
+      </div>
+      <!-- Wake-up overlay -->
+      <div id="hf-warmup" style="
+        position:absolute;inset:0;
+        background:rgba(10,12,26,.92);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:16px;z-index:10;border-radius:0 0 14px 14px;
+        transition:opacity .5s ease">
+        <div style="position:relative;width:56px;height:56px">
+          <div style="position:absolute;inset:0;border-radius:50%;border:3px solid rgba(124,58,237,.2);animation:pulse-ring 1.5s ease infinite"></div>
+          <div style="position:absolute;inset:6px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);animation:pulse-dot 1.5s ease infinite"></div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:6px">🌊 Waking up Kalpanā…</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.45)">Hugging Face Space is starting — usually takes 15–30 seconds</div>
+          <div id="warmup-timer" style="font-size:12px;color:rgba(167,139,250,.6);margin-top:8px;font-family:'JetBrains Mono',monospace">Pinging server…</div>
+        </div>
+      </div>
+      <iframe
+        id="demo-iframe"
+        src=""
+        class="demo-iframe"
+        allow="clipboard-read; clipboard-write; storage-access-by-user-activation"
+        sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation"
+        onload="hideWarmup()"
+        style="position:relative;z-index:1"
+      ></iframe>
+    </div>
+    <div style="text-align:center;margin-top:14px;font-size:13px;color:rgba(255,255,255,.3)">
+      Live embed from <a href="https://huggingface.co/spaces/MaduRox/Kalpana-Chat" target="_blank" style="color:rgba(167,139,250,.7)">huggingface.co/spaces/MaduRox/Kalpana-Chat</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════════════════ -->
+<section class="section how-section" id="how">
+  <div class="how-grid">
+    <div>
+      <div class="section-label">How It Works</div>
+      <div class="section-title">Memory Without Limits</div>
+      <p class="section-sub" style="margin-bottom:36px">Traditional AI loses context as documents grow. Kalpanā stores everything in a constant-size field that never grows — no matter how much you feed it.</p>
+      <div class="how-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Upload your documents</h3>
+            <p>Drop in PDFs, TXTs or paste text. Kalpanā splits them into chunks and holographically encodes each one into a fixed 8MB memory field.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Ask any question</h3>
+            <p>Your question resonates through all stored content simultaneously — the entire memory is searched in a single pass, retrieving the most relevant pieces in milliseconds.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Get a precise answer</h3>
+            <p>The retrieved evidence is passed to the language model. No hallucination — the answer is grounded in your documents, with exact source passages.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Export as a Knowledge Pack</h3>
+            <p>Save the entire conversation + encoded memory as a compact 8MB <strong style="color:rgba(167,139,250,.9)">.kp</strong> Knowledge Pack file holding up to 3.27M tokens. Share it, reload it, or load a pre-built pack instantly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="how-visual">
+        <div class="vis-label">Memory comparison — 1M token document</div>
+        <div class="mem-row">
+          <span class="mem-name">Standard KV Cache</span>
+          <span class="mem-val red">122 GB 🔴</span>
+        </div>
+        <div class="memory-bar"><div class="memory-fill" style="width:100%;background:linear-gradient(90deg,#f43f5e,#fb7185)"></div></div>
+        <div style="height:16px"></div>
+        <div class="mem-row">
+          <span class="mem-name">RAG (external vector DB)</span>
+          <span class="mem-val yellow">Scales linearly 🟡</span>
+        </div>
+        <div class="memory-bar"><div class="memory-fill" style="width:65%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div>
+        <div style="height:16px"></div>
+        <div class="mem-row">
+          <span class="mem-name">Kalpanā RIF Memory</span>
+          <span class="mem-val">8 MB ✅</span>
+        </div>
+        <div class="memory-bar"><div class="memory-fill" style="width:3%;background:linear-gradient(90deg,#4f46e5,#7c3aed)"></div></div>
+        <div class="vis-divider"></div>
+        <div class="vis-highlight">
+          <strong>Kalpanā Memory</strong> uses a fixed resonant interference field — the memory size stays constant at 8MB regardless of whether you store 1,000 or 3.27 million tokens. No database. No external index. Just physics-inspired holographic storage.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FEATURES
+═══════════════════════════════════════════════════ -->
+<section class="section">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-label">Capabilities</div>
+    <div class="section-title">Built for Real-World AI</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <h3>PDF & Text Ingestion</h3>
+        <p>Upload PDFs or plain text files directly. Kalpanā automatically chunks and encodes your content with zero configuration required.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Holographic Retrieval</h3>
+        <p>Unlike keyword search or vector databases, Kalpanā searches all stored content simultaneously in a single O(1) operation — no indexing, no chunked lookups.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📦</div>
+        <h3>Knowledge Packs (.kp)</h3>
+        <p>Export your encoded memory as a portable 8MB <strong style="color:rgba(167,139,250,.7)">.kp</strong> Knowledge Pack — a self-contained file storing up to 3.27M tokens. Load, share, or distribute pre-built topic packs instantly.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚀</div>
+        <h3>REST API Access</h3>
+        <p>Full OpenAPI-documented REST endpoints. Ingest documents, query memory, and integrate Kalpanā into your own applications.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>No Data Sent Externally</h3>
+        <p>Your documents are encoded directly into the memory field. No third-party vector database. No data leaving your session.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Constant-Time Memory</h3>
+        <p>O(1) memory growth means the 1,000th document is as fast to store and retrieve as the first. Performance doesn't degrade with scale.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     KNOWLEDGE PACKS
+═══════════════════════════════════════════════════ -->
+<section class="section" id="packs" style="background:linear-gradient(135deg,rgba(124,58,237,.05),rgba(6,182,212,.04));border-top:1px solid rgba(124,58,237,.15);border-bottom:1px solid rgba(124,58,237,.15)">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-label" style="color:#06b6d4">Knowledge Packs</div>
+    <div class="section-title">Your Memory, Packaged and Portable</div>
+    <p class="section-sub" style="margin-bottom:48px">A <strong style="color:rgba(167,139,250,.9)">.kp</strong> file is a self-contained Kalpanā Knowledge Pack — a single 8MB file that holds up to 3.27 million tokens of encoded knowledge. Create one from your documents, share it with your team, or load a pre-built domain pack and start asking questions immediately. <span style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#f59e0b;padding:2px 9px;border-radius:100px;font-size:12px;font-weight:600;white-space:nowrap">Patent Pending</span></p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+      <div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px;margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+            <div style="font-size:40px">📦</div>
+            <div>
+              <div style="font-size:18px;font-weight:700;margin-bottom:3px">What is a Knowledge Pack?</div>
+              <div style="font-size:13px;color:rgba(255,255,255,.4)">The .kp Knowledge Pack format · Patent Pending</div>
+            </div>
+          </div>
+          <p style="font-size:14px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:16px">A Knowledge Pack is the entire Kalpanā memory state saved to a single compact file. It contains the complete encoded representation of all documents you ingested — ready to load and query instantly on any device.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);border-radius:8px;padding:10px 16px;text-align:center;flex:1;min-width:100px">
+              <div style="font-size:22px;font-weight:800;color:#06b6d4">8 MB</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">File size</div>
+            </div>
+            <div style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:10px 16px;text-align:center;flex:1;min-width:100px">
+              <div style="font-size:22px;font-weight:800;color:#8b5cf6">3.27M</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">Tokens stored</div>
+            </div>
+            <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 16px;text-align:center;flex:1;min-width:100px">
+              <div style="font-size:22px;font-weight:800;color:#10b981">~2,500</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">Research papers</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px">
+          <div style="font-size:16px;font-weight:600;margin-bottom:16px">💡 How to use a Knowledge Pack</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:6px;background:rgba(79,70,229,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</div>
+              <p style="font-size:14px;color:rgba(255,255,255,.55);line-height:1.5">Open Kalpanā Chat and click <strong style="color:rgba(255,255,255,.8)">Load Pack</strong></p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:6px;background:rgba(79,70,229,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</div>
+              <p style="font-size:14px;color:rgba(255,255,255,.55);line-height:1.5">Drop in a <strong style="color:rgba(167,139,250,.9)">.kp</strong> Knowledge Pack file — it loads in under a second</p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:6px;background:rgba(79,70,229,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</div>
+              <p style="font-size:14px;color:rgba(255,255,255,.55);line-height:1.5">Ask anything — 3.27M tokens of knowledge instantly available</p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:6px;background:rgba(79,70,229,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</div>
+              <p style="font-size:14px;color:rgba(255,255,255,.55);line-height:1.5">Save an updated pack with your conversation included</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="font-size:15px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:4px">🗂️ Example Knowledge Pack use cases</div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:20px;display:flex;gap:14px">
+          <div style="font-size:28px">🏛️</div>
+          <div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px">Legal Practice Pack</div>
+            <p style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.55">Encode your firm's entire case library, jurisdiction rules and contract templates into one shareable 8MB file. Load it on any machine — instant expert memory.</p>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:20px;display:flex;gap:14px">
+          <div style="font-size:28px">🧬</div>
+          <div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px">Medical Guidelines Pack</div>
+            <p style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.55">Clinical protocols, drug interactions, diagnostic criteria — all in one pack. Updated monthly. Distribute to your whole care team in seconds.</p>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:20px;display:flex;gap:14px">
+          <div style="font-size:28px">🎓</div>
+          <div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px">Research Corpus Pack</div>
+            <p style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.55">Encode ~2,500 research papers into one 8MB file. Share it with your lab. Every member has instant Q&amp;A access to the full literature — no database required.</p>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:20px;display:flex;gap:14px">
+          <div style="font-size:28px">🏢</div>
+          <div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:4px">Company Knowledge Pack</div>
+            <p style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.55">Onboarding docs, HR policies, product specs, technical runbooks — one file replaces your entire internal wiki for AI-assisted queries.</p>
+          </div>
+        </div>
+        <a href="https://huggingface.co/spaces/MaduRox/Kalpana-Chat" target="_blank" class="btn-primary" style="text-align:center;margin-top:4px">📦 Create Your First Knowledge Pack →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     API
+═══════════════════════════════════════════════════ -->
+<section class="section api-section" id="api">
+  <div class="api-grid">
+    <div>
+      <div class="section-label">Developer API</div>
+      <div class="section-title">Integrate in Minutes</div>
+      <p class="section-sub" style="margin-bottom:28px">The Kalpanā API is fully documented with interactive Swagger UI. Ingest documents, query memory, and retrieve answers — all via simple REST calls.</p>
+      <div class="endpoint-list">
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <div class="endpoint-info">
+            <h4>/ingest</h4>
+            <p>Upload a document (PDF or text) into the Kalpanā memory field</p>
+          </div>
+        </div>
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <div class="endpoint-info">
+            <h4>/query</h4>
+            <p>Query the memory with a natural language question, get ranked evidence blocks back</p>
+          </div>
+        </div>
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <div class="endpoint-info">
+            <h4>/chat</h4>
+            <p>Full chat completion with Kalpanā memory context injected automatically</p>
+          </div>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <div class="endpoint-info">
+            <h4>/status</h4>
+            <p>Check memory utilisation, chunk count, and system health</p>
+          </div>
+        </div>
+      </div>
+      <a href="https://huggingface.co/spaces/MaduRox/Kalpana-API-Public" target="_blank" class="api-link-btn">
+        🚀 Open Interactive API Docs →
+      </a>
+    </div>
+    <div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">Python</span>
+          Quick start example
+        </div>
+        <pre><code><span class="kw">import</span> requests
+
+<span class="cm"># 1. Ingest a document</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"report.pdf"</span>, <span class="str">"rb"</span>) <span class="kw">as</span> <span class="var">f</span>:
+    response = requests.<span class="fn">post</span>(
+        <span class="str">"https://madurox-kalpana-api-public"
+".hf.space/ingest"</span>,
+        files={<span class="str">"file"</span>: <span class="var">f</span>}
+    )
+
+<span class="cm"># 2. Query memory</span>
+answer = requests.<span class="fn">post</span>(
+    <span class="str">"https://madurox-kalpana-api-public"
+".hf.space/chat"</span>,
+    json={
+        <span class="str">"message"</span>: <span class="str">"What were the key findings?"</span>,
+        <span class="str">"session_id"</span>: response.json()[<span class="str">"session_id"</span>]
+    }
+)
+
+<span class="fn">print</span>(answer.json()[<span class="str">"response"</span>])
+<span class="cm"># → "The key findings were..."</span></code></pre>
+      </div>
+      <div style="margin-top:16px">
+        <div class="demo-frame" style="border-radius:12px">
+          <div class="demo-browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot" style="background:#ff5f57"></div>
+              <div class="browser-dot" style="background:#febc2e"></div>
+              <div class="browser-dot" style="background:#28c840"></div>
+            </div>
+            <div class="browser-url">madurox-kalpana-api-public.hf.space</div>
+          </div>
+          <iframe
+            src="https://madurox-kalpana-api-public.hf.space"
+            style="width:100%;height:320px;border:none;display:block"
+            allow="clipboard-read; clipboard-write"
+            sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     USE CASES
+═══════════════════════════════════════════════════ -->
+<section class="section">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-label">Use Cases</div>
+    <div class="section-title">What You Can Build</div>
+    <div class="use-cases">
+      <div class="use-case">
+        <div class="use-icon">📚</div>
+        <div>
+          <h3>Research & Document Analysis</h3>
+          <p>Feed entire research libraries — hundreds of papers, reports, books — and ask precise questions. Kalpanā retrieves exact passages, not hallucinated summaries.</p>
+        </div>
+      </div>
+      <div class="use-case">
+        <div class="use-icon">⚖️</div>
+        <div>
+          <h3>Legal & Compliance</h3>
+          <p>Ingest contracts, regulations and case files. Query across all documents simultaneously to find relevant clauses and precedents in seconds.</p>
+        </div>
+      </div>
+      <div class="use-case">
+        <div class="use-icon">🏥</div>
+        <div>
+          <h3>Medical Knowledge Bases</h3>
+          <p>Store clinical guidelines, patient records and research literature. Retrieve context-accurate answers without the risks of standard LLM hallucination.</p>
+        </div>
+      </div>
+      <div class="use-case">
+        <div class="use-icon">🏢</div>
+        <div>
+          <h3>Enterprise Knowledge Management</h3>
+          <p>Replace expensive vector databases with a single O(1) memory field. Embed Kalpanā into your internal tools via REST API with minimal infrastructure.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     POWERED BY
+═══════════════════════════════════════════════════ -->
+<section class="section" style="border-top:1px solid rgba(255,255,255,.05);padding-top:60px;padding-bottom:60px">
+  <div style="max-width:1100px;margin:0 auto;text-align:center">
+    <div class="section-label" style="margin-bottom:8px">Powered by</div>
+    <p style="font-size:15px;color:rgba(255,255,255,.4);margin-bottom:36px">Built on open, reproducible infrastructure. No black boxes.</p>
+    <div class="powered-row">
+      <div class="powered-item"><span class="powered-icon">🤗</span> Hugging Face Spaces</div>
+      <div class="powered-item"><span class="powered-icon">🦙</span> Meta Llama 3.2</div>
+      <div class="powered-item"><span class="powered-icon">⚡</span> NVIDIA A100 GPU</div>
+      <div class="powered-item"><span class="powered-icon">🐍</span> FastAPI / Docker</div>
+      <div class="powered-item"><span class="powered-icon">🔬</span> Kalpanā SDK (Python)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     RESEARCH
+═══════════════════════════════════════════════════ -->
+<section class="section" style="background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.05)" id="research">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-label">Research</div>
+    <div class="section-title">Built on Peer-Reviewed Science</div>
+    <p class="section-sub">Kalpanā is grounded in original research on resonant interference fields and spectral memory theory — not prompt engineering or retrieval hacks.</p>
+    <div class="paper-card">
+      <div class="paper-icon">📝</div>
+      <div>
+        <h3>Kalpanā: Resonant Interference Memory for Constant-State Long-Context AI</h3>
+        <p>Introduces the Resonant Interference Field (RIF) architecture — a fixed-size O(1) memory substrate that holographically encodes millions of tokens into a constant 8MB state tensor. Derives the Spectral Packing Law governing storage capacity and empirically validates the Kalpana Limit across long-context benchmarks including LongBench Pro at 128K tokens. Knowledge Packs (.kp) are a novel portable memory format introduced in this work.</p>
+        <div class="paper-meta">
+          <span class="paper-tag">B. Madusha R. Perera · 2026</span>
+          <span class="paper-tag">Memory Architecture</span>
+          <span class="paper-tag">Long-Context AI</span>
+          <span class="paper-tag">O(1) Memory</span>
+          <span class="paper-tag" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.25);color:#f59e0b">⚖️ Patent Pending</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     CONTACT / COMPANY
+═══════════════════════════════════════════════════ -->
+<section class="section" id="contact" style="background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.05)">
+  <div style="max-width:1100px;margin:0 auto">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
+      <div>
+        <!-- Vijñāna AI logo — large and prominent -->
+        <div style="margin-bottom:28px">
+          <img src="VijnanaiLogo.png" alt="VIJÑĀNAAI"
+            style="width:220px;height:220px;
+                   border-radius:50%;
+                   object-fit:cover;
+                   border:3px solid rgba(124,58,237,.5);
+                   box-shadow:0 0 0 10px rgba(79,70,229,.07), 0 0 48px rgba(124,58,237,.35);
+                   filter:drop-shadow(0 0 20px rgba(124,58,237,.4));
+                   display:block">
+        </div>
+        <div class="section-label">About Us</div>
+        <div style="font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:4px">VIJÑĀNAAI</div>
+        <div style="font-size:clamp(17px,2.2vw,26px);font-weight:600;font-family:serif;color:rgba(167,139,250,.85);letter-spacing:.04em;margin-bottom:18px">විඥාන කෘත්‍රිම බුද්ධිය</div>
+        <p style="font-size:15px;color:rgba(255,255,255,.55);line-height:1.75;margin-bottom:18px">VIJÑĀNAAI derives its name from Vijñāna—the Sanskrit and Pali term for conscious awareness and cognition—combined with AI. Pronounced "Vijñāna-eye," the name symbolizes our vision of artificial intelligence that not only computes, but perceives, remembers, and understands. It reflects our mission to build the next generation of AI infrastructure inspired by principles of cognition and efficient memory.</p>
+        <p style="font-size:14px;color:rgba(255,255,255,.38);line-height:1.7;margin-bottom:28px">Kalpanā is our flagship product — the world's first O(1) holographic memory for large language models. Patent pending. Peer-reviewed research. Running live today.</p>
+        <div style="display:flex;align-items:center;gap:12px">
+          <img src="KalapanaLogo.png" alt="Kalpanā" style="height:44px;width:auto;object-fit:contain;border-radius:8px;opacity:.85">
+          <div style="font-size:13px;color:rgba(255,255,255,.35)">Flagship Chat app product by VIJÑĀNAAI</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="background:linear-gradient(135deg,rgba(79,70,229,.08),rgba(124,58,237,.08));border:1px solid rgba(79,70,229,.2);border-radius:16px;padding:28px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-size:22px">💼</span>
+            <div style="font-size:14px;font-weight:700;color:#fff">Investment Enquiries</div>
+          </div>
+          <p style="font-size:14px;color:rgba(255,255,255,.5);margin-bottom:16px;line-height:1.6">We are seeking strategic investors and partners for Kalpanā and the Vijñāna AI platform. If you are an investor or institution interested in deep-tech AI memory architecture, reach out directly.</p>
+          <a href="mailto:invest@vijnaanaai.com" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(79,70,229,.25),rgba(124,58,237,.25));border:1px solid rgba(79,70,229,.4);border-radius:9px;padding:12px 20px;color:#fff;text-decoration:none;font-size:14px;font-weight:600;letter-spacing:-.2px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            invest@vijñānaai.com
+          </a>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-size:22px">🤝</span>
+            <div style="font-size:14px;font-weight:700;color:#fff">Research &amp; Collaboration</div>
+          </div>
+          <p style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:16px;line-height:1.6">For research collaborations, academic enquiries, technical discussions or press — contact the founder directly.</p>
+          <a href="mailto:madushaperera@vijnaanaai.com" style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:12px 20px;color:rgba(255,255,255,.8);text-decoration:none;font-size:14px;font-weight:600;letter-spacing:-.2px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            madushaperera@vijñānaai.com
+          </a>
+          <div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,.28)">B. Madusha R. Perera &nbsp;·&nbsp; Founder &amp; Chief Researcher, VIJÑĀNAAI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     CTA
+═══════════════════════════════════════════════════ -->
+<section class="cta-banner">
+  <div class="section-label" style="margin-bottom:14px">Get Started Free</div>
+  <h2>Your AI Doesn't Have to Forget</h2>
+  <p>No signup required. No credit card. Open Kalpanā Chat on Hugging Face and start uploading documents in seconds.</p>
+  <div class="hero-btns">
+    <a href="https://huggingface.co/spaces/MaduRox/Kalpana-Chat" target="_blank" class="btn-primary">🌊 Open Kalpanā Chat</a>
+    <a href="https://huggingface.co/spaces/MaduRox/Kalpana-API-Public" target="_blank" class="btn-secondary">🚀 API Documentation</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-left" style="flex-direction:column;align-items:flex-start;gap:6px">
+    <img src="VijnanaiLogo.png" alt="VIJÑĀNAAI" style="height:22px;width:auto;opacity:.8">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:13px;color:rgba(255,255,255,.3)">🌊 Kalpanā</span>
+      <span style="font-size:9px;font-weight:600;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#f59e0b;padding:2px 7px;border-radius:100px;letter-spacing:.06em">PATENT PENDING</span>
+    </div>
+  </div>
+  <div class="footer-links">
+    <a href="https://tinyurl.com/kalpanaai" target="_blank" style="color:var(--emerald);font-weight:700">📱 Offline App (tinyurl.com/kalpanaai)</a>
+    <a href="https://huggingface.co/spaces/MaduRox/Kalpana-Chat" target="_blank">Chat</a>
+    <a href="https://huggingface.co/spaces/MaduRox/Kalpana-API-Public" target="_blank">API</a>
+    <a href="https://huggingface.co/MaduRox" target="_blank">HuggingFace</a>
+    <a href="mailto:invest@vijnaanaai.com">Invest</a>
+    <a href="mailto:madushaperera@vijnaanaai.com">Contact</a>
+  </div>
+  <div class="footer-right">
+    <div>© 2026 VIJÑĀNAAI &nbsp;·&nbsp; B. Madusha R. Perera &nbsp;·&nbsp; Patent Pending</div>
+    <div style="margin-top:4px">invest@vijñānaai.com &nbsp;·&nbsp; madushaperera@vijñānaai.com</div>
+  </div>
+</footer>
+
+<style>
+@keyframes pulse-ring{
+  0%{transform:scale(.9);opacity:.6}
+  50%{transform:scale(1.1);opacity:1}
+  100%{transform:scale(.9);opacity:.6}
+}
+@keyframes pulse-dot{
+  0%{transform:scale(.95)}
+  50%{transform:scale(1.05)}
+  100%{transform:scale(.95)}
+}
+</style>
+<script>
+// ── HuggingFace Space Wake-Up ──────────────────────────────
+const HF_CHAT = 'https://madurox-kalpana-chat.static.hf.space';
+const HF_API  = 'https://madurox-kalpana-api-public.hf.space';
+
+function pingSpaces() {
+  [HF_CHAT, HF_API].forEach(url => {
+    fetch(url, { mode: 'no-cors', cache: 'no-store' }).catch(() => {});
+  });
+}
+
+function showWarmup() {
+  const ov = document.getElementById('hf-warmup');
+  if (ov) { ov.style.opacity = '1'; ov.style.pointerEvents = 'all'; }
+  let secs = 0;
+  const timer = document.getElementById('warmup-timer');
+  window._warmupInterval = setInterval(() => {
+    secs++;
+    if (timer) timer.textContent = `Server pinged • ${secs}s elapsed…`;
+  }, 1000);
+}
+
+function hideWarmup() {
+  const ov = document.getElementById('hf-warmup');
+  if (ov) {
+    ov.style.opacity = '0';
+    setTimeout(() => { ov.style.display = 'none'; }, 500);
+  }
+  clearInterval(window._warmupInterval);
+}
+
+function loadDemoIframe(src) {
+  const iframe = document.getElementById('demo-iframe');
+  if (iframe) { iframe.src = src; }
+  showWarmup();
+}
+
+// Ping both spaces immediately on page load
+pingSpaces();
+// Load chat iframe after a short delay (gives space time to start waking)
+setTimeout(() => loadDemoIframe(HF_CHAT + '/index.html'), 800);
+
+// ── Demo tab switcher ──────────────────────────────────────
+function switchDemo(mode, btn) {
+  document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const urlBar = document.getElementById('url-bar');
+  if (mode === 'chat') {
+    urlBar.textContent = 'huggingface.co/spaces/MaduRox/Kalpana-Chat';
+    loadDemoIframe(HF_CHAT + '/index.html');
+  } else {
+    urlBar.textContent = 'madurox-kalpana-api-public.hf.space';
+    loadDemoIframe(HF_API);
+  }
+  pingSpaces();
+}
+
+// ── Scroll fade-up ─────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card,.use-case,.step,.endpoint,.paper-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity .6s ease, transform .6s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
